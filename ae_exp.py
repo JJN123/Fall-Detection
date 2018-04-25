@@ -37,86 +37,22 @@ class AEExp(ImgExp):
 		 	zoom_range = zoom_range, dset = dset)
 
 
-	def display_reconstructions(self, fall_start = 0):
-		
-		if self.model_type == 'conv': #TODO shorten
-			print('here')
-			self.test_data = self.test_data.reshape(len(self.test_data), self.img_width, self.img_height, 1)
-		else:
-			self.test_data = self.test_data.reshape((len(self.test_data), np.prod(self.test_data.shape[1:])))
-		
-		fall_length = np.sum(self.test_labels) 
-		num_NF = 20
-		start_index = fall_start - num_NF
-		dt = 4
-		n = int(np.ceil((fall_length + num_NF)/dt))  # how many digits we will display
-
-		decoded_imgs = self.model.predict(self.test_data)
-	
-		shown_test = []
-		shown_decoded = []
-		fig = plt.figure(figsize=(20, 4))
-		fig.suptitle('Thermal Camera Image Reconstructions', fontsize = 16)
-		for i in range(n): #3xn plot, at i+1th coutnign from left to right
-			# display original
-			ax = plt.subplot(3, n, i + 1)
-			plt.imshow(self.test_data[start_index + dt*i].reshape(self.img_width, self.img_height), cmap = 'gray')
-			#plt.gray()
-			ax.get_xaxis().set_visible(False)
-			ax.get_yaxis().set_visible(False)
-
-			if i == int(np.floor((n-1)/2)):
-				ax.set_title('Original Frames', {'horizontalalignment' : 'left'})			
-
-			# display reconstruction
-			#plt.tight_layout()
-			ax = plt.subplot(3, n, i + 1 + n)
-
-			plt.imshow(decoded_imgs[start_index + dt*i].reshape(self.img_width, self.img_height), cmap = 'gray')
-			
-			ax.get_xaxis().set_visible(False)
-			ax.get_yaxis().set_visible(False)				
-			if i == int(np.floor((n-1)/2)):
-				ax.set_title('Reconstructed Frames',{'horizontalalignment' : 'left'})
-			
-#			plt.tight_layout()
-
-			shown_test.append(self.test_data[start_index + dt*i].reshape(self.img_width, self.img_height))
-			shown_decoded.append(decoded_imgs[start_index + dt*i].reshape(self.img_width, self.img_height))
-			
-
-		import matplotlib.gridspec as gridspec
-		gs = gridspec.GridSpec(n,1)
-		#gs.update(hspace = 0.000001)
-		ax = plt.subplot(gs[-1, 0])
-
-		#ax.set_ylim(0.005,0.03)
-		ax.get_xaxis().set_visible(False)
-		#ax.get_yaxis().set_visible(False)			
-		#ax.set_ylabel('Reconstruction \n Error', rotation = 0, labelpad = 35)
-		#ax.set_title('Reconstruction Error')
-		
-	
-		plot_MSE_per_sample(np.array(shown_test), np.array(shown_decoded))
-		#gs.tight_layout(fig, rect=[0, 0, 0.5, 1])
-		#plt.subplots_adjust(hspace = 0.000000000000000000001)
-		#plt.tight_layout()
-		plt.show()
-		return decoded_imgs
-
 	def play_frames_with_reconstructions(self, to_save = None):
+		"""
+		Plays frames of test_data with reconstuction.
+		Params:
+				bool to_save: if True, saves animation to 
+		"""
 		preds = self.model.predict(self.test_data.reshape(len(self.test_data),64,64,1))
 		print(np.amax(preds[0]), np.amin(preds[0]))
-		# plt.imshow(preds[0].reshape(64,64))
-		# plt.show()
+		
 		ani = animate_fall_detect(self.model, self.test_data, self.img_width, self.img_height)
 		if to_save != None:
 			ani.save('{}.mp4'.format(to_save))
 		ani.event_source.stop()
 		del ani
 		plt.close()
-		# decoded_imgs = self.model.predict()
-		# play_frames(self.test_data, decoded_imgs)
+
 
 	def train(self, sample_weight=None):
 		"""
@@ -168,7 +104,7 @@ class AEExp(ImgExp):
 		'''
 		Gets mean squared error between test_data array of images, and their reconstructions from self.model
 
-		Attributes:
+		Params:
 				ndarray test_data: Data consiting of frames, ie. of dimension (samples, img_height, img_width)
 		Returns:
 				ndarray of MSE scores, one for each frame in test_data, ie dimensions (samples,1).
