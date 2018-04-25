@@ -5,18 +5,22 @@ import AUC_CallBack
 from keras.layers import Deconvolution3D
 from keras.optimizers import SGD
 from keras import regularizers
-from keras.layers import Input, LSTM, RepeatVector, concatenate
+from keras.layers import LSTM, RepeatVector, concatenate
 from keras import backend as K
 
-# K.set_image_dim_ordering('th')
+"""
+Defining Keras models as functions which return model object, aswell as model name and mode type strs. All models take take img_width and img_height
+ints, which correpsond to dimensions of images passed to models.
 
 """
-Defining Keras models as functions which return model object, aswell as model name and mode type strs.
-
-"""
 
 
-def deep_autoencoder_flow(img_width = 64, img_height = 64, encoding_dim = 500, output_activation = 'tanh', regularizer_list = []):
+def deep_autoencoder_flow(img_width = 64, img_height = 64, output_activation = 'tanh', regularizer_list = []):
+
+	"""
+	list regularizer_list: List of strings indicating which regulairzers to use, options are 
+	'L1L2' and 'Dropout'. Can use both. Assume regularizer list ordered like ['L1L2', 'Dropout']
+	"""
 
 	flatenned_dim = img_width*img_height
 	input_shape = (img_width, img_height, 1)
@@ -85,15 +89,11 @@ def CAE(img_width =64, img_height = 64, regularizer_list = []):
 		activity_regularizer = activity_regularizer)(x)
 	x = MaxPooling2D((2, 2), padding='same')(x)
 
-	#if 'Dropout' in regularizer_list:
-	#	x = Dropout(0.25)(x)
 
 	x = Conv2D(8, (3, 3), activation='relu', padding='same',kernel_regularizer=kernel_regularizer,\
 		activity_regularizer = activity_regularizer)(x)
 	encoded = MaxPooling2D((2, 2), padding='same')(x)
 
-	#if 'Dropout' in regularizer_list:
-	#	encoded = Dropout(0.25)(encoded)
 
 	x = Conv2DTranspose(8, (3, 3), activation='relu', padding='same')(encoded)
 	x = UpSampling2D((2, 2))(x)
@@ -225,17 +225,10 @@ def CAE3D_deconv(img_width, img_height, win_length):
     x = Conv3D(8, (temp_depth, 3, 3), activation='relu', padding='same')(x)
     encoded = MaxPooling3D((temp_pool, 2, 2), padding='same')(x)
 
-    
-    #x = Deconvolution3D(8, (3, 3, 3),strides = (2,2,2), activation='relu', padding='same')(encoded)
-    #x = Conv3D(8, (temp_depth, 3, 3), activation='relu', padding='same')(encoded)
-    #x = UpSampling3D((temp_pool, 2, 2))(x)
+
     x = Deconvolution3D(8, (temp_depth, 3, 3),strides = (2,2,2), activation='relu', padding='same')(encoded)
     x = Deconvolution3D(16, (temp_depth, 3, 3),strides = (2,2,2), activation='relu', padding='same')(x)
     
-    #x = Conv3D(8, (temp_depth, 3, 3), activation='relu', padding='same')(x)
-    #x = UpSampling3D((temp_pool, 2, 2))(x)
-    #x = Conv3D(16, (temp_depth, 3, 3), activation='relu', padding = 'same')(x)
-    #x = UpSampling3D((1, 2, 2))(x)
     decoded = Conv3D(1, (temp_depth, 3, 3), activation='tanh', padding='same')(x)
 
     autoencoder = Model(input_window, decoded)
@@ -258,23 +251,13 @@ def CAE_deconv(img_width, img_height):
     
     x = Conv2D(16, (3,3), activation='relu', padding='same')(input_frame)
     x = MaxPooling2D((2, 2), padding='same')(x)
-    #x = Conv3D(8, (temp_depth, 3, 3), activation='relu', padding='same')(x)
-    #x = MaxPooling3D((temp_pool, 2, 2), padding='same')(x)
     x = Dropout(0.25)(x)
     x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
     encoded = MaxPooling2D((2, 2), padding='same')(x)
 
-    
-    #x = Deconvolution3D(8, (3, 3, 3),strides = (2,2,2), activation='relu', padding='same')(encoded)
-    #x = Conv3D(8, (temp_depth, 3, 3), activation='relu', padding='same')(encoded)
-    #x = UpSampling3D((temp_pool, 2, 2))(x)
     x = Conv2DTranspose(8, (3, 3),strides = (2,2), activation='relu', padding='same')(encoded)
     x = Conv2DTranspose(16, (3, 3),strides = (2,2), activation='relu', padding='same')(x)
     
-    #x = Conv3D(8, (temp_depth, 3, 3), activation='relu', padding='same')(x)
-    #x = UpSampling3D((temp_pool, 2, 2))(x)
-    #x = Conv3D(16, (temp_depth, 3, 3), activation='relu', padding = 'same')(x)
-    #x = UpSampling3D((1, 2, 2))(x)
     decoded = Conv2D(1, (3, 3), activation='tanh', padding='same')(x)
 
     autoencoder = Model(input_frame, decoded)
