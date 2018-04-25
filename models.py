@@ -9,8 +9,8 @@ from keras.layers import LSTM, RepeatVector, concatenate
 from keras import backend as K
 
 """
-Defining Keras models as functions which return model object, aswell as model name and mode type strs. All models take take img_width and img_height
-ints, which correpsond to dimensions of images passed to models.
+Defining Keras models as functions which return model object, aswell as model name and mode type strs.
+All models take take img_width and img_height ints, which correpsond to dimensions of images passed to models.
 
 """
 

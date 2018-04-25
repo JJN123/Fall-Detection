@@ -13,11 +13,28 @@ import glob
 np.set_printoptions(threshold = np.nan)
 
 class ImgExp:
+
+	"""
+	Abstract parent class for ae_exp and seq_ae_exp. All params are attributes. Methods for training and testing are
+	not implemented. Use children classes seq_ae_exp or ae_exp for training and testing. 
+	"""
 	def __init__(self, model = None, img_width = None, img_height = None, model_name = 'None',\
 		batch_size = 32, model_type = None, pre_load = None, initial_epoch = 0, epochs = 1, \
 		zoom_range = 0, hor_flip = False, dset = 'Thermal'):
+
 		'''
-		Parent class for 
+		Args:
+			model model: Keras model obect
+			int img_width: width of images in experiment
+			int img_height: height of images in experiment
+			str model_name: name of model, used for saving model/model info.
+			int batch_size: Number of samples in a batch
+			str pre_load: path to model save
+			int epochs: how many epochs to train for
+			float zoom_range: as defined in Keras https://keras.io/preprocessing/image/
+			bool hor_flip: if True then horiztonal flipping data augmentation is performed 
+			(if sequence of images, then flips whole sequence)
+
 		'''
 		
 		self.dset = dset
@@ -35,21 +52,16 @@ class ImgExp:
 		self.hor_flip = hor_flip
 		
 			
-		if self.pre_load != None:
+		if self.pre_load != None: 
 			print('loading saved model')
 			self.model = load_model(pre_load)
 			self.model_name = os.path.basename(pre_load).split('.')[0]
 
-	def visualize(self):
-		if self.model_type == 'conv':
-			self.test_data = self.test_data[500].reshape(1,64,64,1)
-		model, test_data = self.model, self.test_data
-		maps = get_activations(model, test_data, True)
-		display_activations(maps)
-		return maps
-
 	def save_exp(self):
-	        
+	       
+	    '''
+	    Saves the model of the experiment to './Models/self.dset/self.model_name'
+	    '''
 		#save_string = self.exp_name #Do this again incase info added to str based on data load(ie after init)
 	    if self.hor_flip == True:
 	        self.model_name = self.model_name + '-hor_flip'
