@@ -17,6 +17,9 @@ class ImgExp:
 	"""
 	Abstract parent class for ae_exp and seq_ae_exp. All params are attributes. Methods for training and testing are
 	not implemented. Use children classes seq_ae_exp or ae_exp for training and testing. 
+	ImgExp is short for image experiment. An experiment is an object which manages loading of image data, training an 
+	autoencoder, aswell aswell as evaluating the trained model on a test set.
+
 	"""
 	def __init__(self, model = None, img_width = None, img_height = None, model_name = 'None',\
 		batch_size = 32, model_type = None, pre_load = None, initial_epoch = 0, epochs = 1, \
@@ -34,6 +37,11 @@ class ImgExp:
 			float zoom_range: as defined in Keras https://keras.io/preprocessing/image/
 			bool hor_flip: if True then horiztonal flipping data augmentation is performed 
 			(if sequence of images, then flips whole sequence)
+			str dset: name of data set to be used in experiment. Current options are:
+					Thermal: A dataset of thermal images
+					UR-Filled: A dataset of kinect depth images with holes filled
+					SDU-Filled: A dataset of kinect depth images with holes filled
+			All dataset contain ADL in training data, and ADL + Falls in test data.
 
 		'''
 		
@@ -77,7 +85,10 @@ class ImgExp:
 	    self.model.save(save_string)
 
 
-	def load_train_data(self, raw = False): #TODO rename this function to load_train_data?
+	def load_train_data(self, raw = False):
+		"""
+		Loads train data from memory. Train data will always consist solely of ADL images/image sequences.
+		"""
 		raise NotImplementedError("Please Implement this method")
 
 	def get_MSE(self, test_data):
@@ -85,8 +96,15 @@ class ImgExp:
 		raise NotImplementedError("Please Implement this method")
 
 	def train(self):
+		"""
+		Train model
+		"""
 		raise NotImplementedError("Please Implement this method")
 	def test(self):
+		"""
+		Evalute model based on reconstruciotn error as anomoly score for detecting falls in test video. Reports ROC AUC
+		and PR AUC.
+		"""
 		raise NotImplementedError("Please Implement this method")
 
 	

@@ -15,7 +15,8 @@ from data_management import *
 
 class AEExp(ImgExp):
 	"""
-	Frame based autoencoder experiment
+	Frame based autoencoder experiment. Images are reconstructed individually, with no temporal information used.
+	All params are attributes, and are initialized in ImgExp parent class.
 	"""
 
 	def __init__(self, model = None, img_width = None, img_height = None, \
@@ -118,6 +119,14 @@ class AEExp(ImgExp):
 		# play_frames(self.test_data, decoded_imgs)
 
 	def train(self, sample_weight=None):
+		"""
+		trains the autoencoder model on data loaded from load_train_data. This data is non-sequential; that is,
+		frames are reconstructed one by one. Reconstruction error (MSE) is minimized. Checkpoints and logs are saved to
+		'./Checkpoints/dset/'
+		'./logs/dset/'
+		Model is saved as per save_exp method
+
+		"""
 
 		print(self.model.summary())
 		model_name = self.model_name
