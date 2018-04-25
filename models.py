@@ -1,7 +1,7 @@
 from keras.models import Sequential, Model
 from keras.layers import Conv2D, MaxPooling2D, UpSampling2D, MaxPooling3D, UpSampling3D, Conv3D, Conv2DTranspose
 from keras.layers import Activation, Dropout, Flatten, Dense, Input, Reshape
-import AUC_CallBack
+
 from keras.layers import Deconvolution3D
 from keras.optimizers import SGD
 from keras import regularizers
@@ -15,13 +15,13 @@ ints, which correpsond to dimensions of images passed to models.
 """
 
 
-def deep_autoencoder_flow(img_width = 64, img_height = 64, output_activation = 'tanh', regularizer_list = []):
+def DAE(img_width = 64, img_height = 64, regularizer_list = []):
 
 	"""
 	list regularizer_list: List of strings indicating which regulairzers to use, options are 
 	'L1L2' and 'Dropout'. Can use both. Assume regularizer list ordered like ['L1L2', 'Dropout']
 	"""
-
+	encoding_dim = 500
 	flatenned_dim = img_width*img_height
 	input_shape = (img_width, img_height, 1)
 	input_img_0 = Input(shape=input_shape)
@@ -54,7 +54,7 @@ def deep_autoencoder_flow(img_width = 64, img_height = 64, output_activation = '
 	
 	model = autoencoder
 
-	model_name = 'DAE-relu_{}'.format(output_activation)
+	model_name = 'DAE'
 
 	for reg in regularizer_list:
 		model_name += '-' + reg
