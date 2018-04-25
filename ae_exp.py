@@ -124,7 +124,7 @@ class AEExp(ImgExp):
 		frames are reconstructed one by one. Reconstruction error (MSE) is minimized. Checkpoints and logs are saved to
 		'./Checkpoints/dset/'
 		'./logs/dset/'
-		Model is saved as per save_exp method
+		Model is saved as per save_exp method in parent class
 
 		"""
 
@@ -163,9 +163,16 @@ class AEExp(ImgExp):
 		self.save_exp()
 
 
-	def get_MSE(self, test_data, test_vid = None):
+	def get_MSE(self, test_data):
+
 		'''
-		g
+		Gets mean squared error between test_data array of images, and their reconstructions from self.model
+
+		Attributes:
+				ndarray test_data: Data consiting of frames, ie. of dimension (samples, img_height, img_width)
+		Returns:
+				ndarray of MSE scores, one for each frame in test_data, ie dimensions (samples,1).
+
 		'''
 
 		if self.model_type == 'conv' or 1: #If using flow(no reason not to) then all take same shape TODO remove condition?
@@ -173,18 +180,9 @@ class AEExp(ImgExp):
 		else:
 			test_data = test_data.reshape((len(test_data), np.prod(test_data.shape[1:])))
 		decoded_imgs = self.model.predict(test_data)
-		#---
-		# mn = np.mean(decoded_imgs, axis = (1,2,3))
-		# print(mn.shape)
-		# plt.plot(mn)
-		# plt.show()
 
 
 		RE = MSE(test_data, decoded_imgs)
-		# print(RE.mean())
-		# plt.plot(RE)
-		# plt.plot(labels)
-		# plt.show() 
 		return RE
 
 	def get_features(self, layer_name, train_or_test = 'test'):
@@ -205,7 +203,8 @@ class AEExp(ImgExp):
 		return intermediate_output
 
 	def load_train_data(self, raw = False): #TODO rename this function to load_train_data?
-		
+		"""
+		"""
 		split_by_vid_or_class = 'Split_by_class'
 		vid_class = 'NonFall'
 

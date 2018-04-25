@@ -373,10 +373,10 @@ def init_data_by_class(vid_class = 'NonFall', train_or_test = 'train', dset = 'T
 
     '''
     Loads data seperated by vid class. To load data seperated by video, use init_videos
-
-    bool fill_holes: if True creates UR data set from denoised depth images
-
     Most usefull for 2D models(which do not require windowing by vid)
+
+    Attributes:
+        bool fill_holes: if True creates UR data set from denoised depth images
     '''
 
     ht,wd = img_width, img_height
@@ -408,16 +408,6 @@ def init_data_by_class(vid_class = 'NonFall', train_or_test = 'train', dset = 'T
             fpath = root_drive + '/SDUFall/{}/{}/ADL*/Filled'.format(train_or_test, vid_class)
 
 
-    elif vid_class == 'NonFall': #use cropped
-
-        if dset == 'Thermal':
-            fpath= root_Drive + '/DataforAE-json' + \
-            '/'+ train_or_test +'/' + vid_class + '/' + 'Cropped'
-
-
-    elif vid_class == 'Fall':#use cropped
-        fpath= root_drive + '/DataforAE-json' + \
-    '/'+ train_or_test +'/' + vid_class + '/Fall*/' + 'Cropped'
 
     data = create_img_data_set(fpath, ht, wd, raw, False) #Don't need to sort
 
