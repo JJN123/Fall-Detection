@@ -80,7 +80,6 @@ def init_videos(img_width = 64, img_height = 64, \
     vid_dir_list_0, vid_dir_list_1 = get_dir_lists(dset)
 
     if raw == False: 
-        
         root_path = dset + '/Processed/Split_by_video'
     else:
         root_path = dset + '/Raw/Split_by_video'
@@ -269,7 +268,6 @@ def create_img_data_set(fpath, ht = 64, wd = 64, raw = False, sort = True, dset 
             img=img.reshape(ht,wd,1)
 
             if raw == False:
-                print('proccessing data')
 
                 img=img-np.mean(img)#Mean centering
                 img=img.astype('float32') / 255. #normalize
@@ -444,26 +442,44 @@ def init_data_by_class(vid_class = 'NonFall', train_or_test = 'train', dset = 'T
 
 def load_data(split_by_vid_or_class = 'Split_by_vid', raw = False, img_width = 64, \
     img_height = 64, vid_class = 'NonFall', dset = 'Thermal'):
-    
 
-    #Implement use_cropped
     path = 'N:/FallDetection/Fall-Data/H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)
 
-    #path = './H5Data/Data_set_imgdim{}x{}.h5'.format(img_width, img_height) #Old
+    #init_h5py(path)
 
-    if split_by_vid_or_class == 'Split_by_class':
-        if raw == False: 
-            root_path = dset + '/Processed/' + split_by_vid_or_class + '/' + vid_class
-        else:
-            root_path = dset + '/Raw/'+ split_by_vid_or_class + '/' + vid_class
+    if not os.path.isfile(path):
+        print('no h5py path found, initializing...')
+        if split_by_vid_or_class == 'Split_by_class':
+            init_data_by_class(vid_class = vid_class, img_width = 64, img_height = 64, \
+                dset = dset, raw = raw)        
+
     else:
-        if raw == False: 
-            root_path = dset + '/Processed/' + split_by_vid_or_class
+        print('h5py path found, loading data_dict..')
+        if split_by_vid_or_class == 'Split_by_class':
+            if raw == False: 
+                root_path = dset + '/Processed/' + split_by_vid_or_class + '/' + vid_class
+            else:
+                root_path = dset + '/Raw/'+ split_by_vid_or_class + '/' + vid_class
         else:
-            root_path = dset + '/Raw/'+ split_by_vid_or_class
-    print(root_path)
-    with h5py.File(path, 'r') as hf:
-        data_dict = hf[root_path]['Data'][:]
+            if raw == False: 
+                root_path = dset + '/Processed/' + split_by_vid_or_class
+            else:
+                root_path = dset + '/Raw/'+ split_by_vid_or_class
+        print(root_path)
+        try:
+            with h5py.File(path, 'r') as hf:
+                data_dict = hf[root_path]['Data'][:]
+        except:
+            print('component not found, initializing...')
+
+            if split_by_vid_or_class == 'Split_by_class':
+                init_data_by_class(vid_class = vid_class, img_width = 64, img_height = 64, \
+                    dset = dset, raw = raw)
+            else:
+                init_videos(img_width = 64, img_height = 64, dset = dset, raw = raw)
+
+        with h5py.File(path, 'r') as hf:
+            data_dict = hf[root_path]['Data'][:]
 
     return data_dict
 

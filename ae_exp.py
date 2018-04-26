@@ -1,7 +1,7 @@
 from keras.models import Sequential, Model
 from keras.layers import Activation, Dropout, Flatten, Dense, Input, Reshape
 from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
-from ImageExp import ImgExp
+from img_exp import ImgExp
 import numpy as np
 import matplotlib.pyplot as plt
 from random import randint
@@ -10,8 +10,9 @@ import time
 from keras.models import load_model
 import os
 from util import *
-from data_management import *
-
+from data_management import load_data
+import sys
+from multi_AEmodel import *
 
 class AEExp(ImgExp):
 	"""
@@ -39,9 +40,10 @@ class AEExp(ImgExp):
 
 	def play_frames_with_reconstructions(self, to_save = None):
 		"""
-		Plays frames of test_data with reconstuction.
+		Plays frames of test_data with reconstuction. Saves animation to to_save
+
 		Params:
-				bool to_save: if True, saves animation to 
+				str to_save: if not None, saves animation to './to_save.mp4'
 		"""
 		preds = self.model.predict(self.test_data.reshape(len(self.test_data),64,64,1))
 		print(np.amax(preds[0]), np.amin(preds[0]))
@@ -98,6 +100,10 @@ class AEExp(ImgExp):
 
 		self.save_exp()
 
+	def test(self):
+
+		get_stats_for_all_vids(experiment = self,\
+					metric = 'AUC', dset = self.dset)
 
 	def get_MSE(self, test_data):
 
@@ -138,9 +144,11 @@ class AEExp(ImgExp):
 		#print(intermediate_output)
 		return intermediate_output
 
-	def load_train_data(self, raw = False): #TODO rename this function to load_train_data?
+	def set_train_data(self, raw = False):
 		"""
+		sets train_data attribute to ADL data correpsonding to the dataset for this experiment
 		"""
+
 		split_by_vid_or_class = 'Split_by_class'
 		vid_class = 'NonFall'
 

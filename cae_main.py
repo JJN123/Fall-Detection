@@ -36,13 +36,11 @@ def init_cae_exp(pre_load = None):
 
 	return convautoencoder_experiment
 
-np.set_printoptions(threshold = 100)
-
 if __name__ == "__main__":
 
 	cae_exp = init_cae_exp()
 
-	cae_exp.load_train_data(raw = False)
+	cae_exp.set_train_data(raw = False)
 
 	data = cae_exp.train_data.reshape(len(cae_exp.train_data), 64, 64, 1)
 	cae_exp.train()

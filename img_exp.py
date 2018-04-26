@@ -1,9 +1,7 @@
 import numpy as np
 from util import *
-from data_management import *
 from keras.models import load_model
 from sklearn.metrics import roc_auc_score, classification_report, confusion_matrix
-from read_activations import get_activations, display_activations
 import h5py
 import os
 import glob
@@ -41,7 +39,7 @@ class ImgExp:
 					Thermal: A dataset of thermal images
 					UR-Filled: A dataset of kinect depth images with holes filled
 					SDU-Filled: A dataset of kinect depth images with holes filled
-			All dataset contain ADL in training data, and ADL + Falls in test data.
+			All datasets contain ADL in training data, and ADL + Falls in test data. 
 
 		'''
 		

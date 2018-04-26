@@ -10,11 +10,7 @@ import glob
 from keras.models import load_model
 import matplotlib.pyplot as plt
 
-
-
-np.set_printoptions(threshold = 100)
-
-def init_daeflow_exp(pre_load = None, regularizer_list = []):
+def init_dae_exp(pre_load = None, regularizer_list = []):
 	batch_size = 16
 		
 	epochs = 1
@@ -46,9 +42,9 @@ if __name__ == "__main__":
 	regularizer_list_list = [['Dropout']]
 
 	for regularizer_list in regularizer_list_list:
-		DAE_exp = init_daeflow_exp(regularizer_list = regularizer_list)
+		DAE_exp = init_dae_exp(regularizer_list = regularizer_list)
 
-		DAE_exp.load_train_data(raw = False)
+		DAE_exp.set_train_data(raw = False)
 		print(DAE_exp.train_data.shape)
 
 		DAE_exp.train()

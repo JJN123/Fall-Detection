@@ -16,12 +16,6 @@ from imblearn.metrics import geometric_mean_score
 import re
 import sys
 #from data_management import *
-sys.path.insert(0, 'O:/AIRR/FallDetection-current/ThermalFallDetect2017/JNogasPy')
-
-
-seed(0)
-#from models import simple_conv
-np.set_printoptions(threshold = 200)
 
 
 def threshold(predictions = None, t = 0.5):

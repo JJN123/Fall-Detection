@@ -42,7 +42,7 @@ def DAE(img_width = 64, img_height = 64, regularizer_list = []):
 
 	decoded = Dense(2*encoding_dim, activation='relu')(encoded)
 	decoded = Dense(3*encoding_dim, activation='relu')(decoded)
-	decoded = Dense(flatenned_dim, activation=output_activation)(decoded)
+	decoded = Dense(flatenned_dim, activation='tanh')(decoded)
 	decoded = Reshape((img_width, img_height, 1), input_shape = (flatenned_dim,))(decoded)
 
 	autoencoder = Model(input_img_0, decoded)
