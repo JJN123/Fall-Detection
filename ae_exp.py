@@ -43,7 +43,7 @@ class AEExp(ImgExp):
 		Plays frames of test_data with reconstuction. Saves animation to to_save
 
 		Params:
-				str to_save: if not None, saves animation to './to_save.mp4'
+			str to_save: if not None, saves animation to './to_save.mp4'
 		"""
 		preds = self.model.predict(self.test_data.reshape(len(self.test_data),64,64,1))
 		print(np.amax(preds[0]), np.amin(preds[0]))
@@ -100,10 +100,10 @@ class AEExp(ImgExp):
 
 		self.save_exp()
 
-	def test(self):
+	def test(self, raw = False):
 
 		get_stats_for_all_vids(experiment = self,\
-					metric = 'AUC', dset = self.dset)
+					metric = 'AUC', dset = self.dset, raw = raw)
 
 	def get_MSE(self, test_data):
 

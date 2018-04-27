@@ -27,7 +27,10 @@ if not os.path.isdir(root_drive):
 
 
 def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mean', models_dir = None,\
-  dset = 'Thermal', agg_type = None):
+  dset = 'Thermal', agg_type = None, raw = False):
+	'''
+	TODO auto initialize data if component not found etc.
+	'''
 		
 	if thresholds != None:
 		data_matrix = [['Mean Reconstruction Error', 'Mean Reconstruction Error + 1 :',\
@@ -47,8 +50,10 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 
 	Fall_stop = 'None' #Make th
 	with h5py.File(path, 'r') as hf:
-		
-		data_dict = hf[dset + '/Processed/Split_by_video']
+		if raw == False:
+			data_dict = hf[dset + '/Processed/Split_by_video']
+		else:
+			data_dict = hf[dset + '/Raw/Split_by_video']
 
 		RE_old = 0
 		for Fall_name, NFF_name in zip(vid_dir_keys_Fall, vid_dir_keys_NFF):

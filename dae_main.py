@@ -24,8 +24,6 @@ def init_dae_exp(pre_load = None, regularizer_list = []):
 
 	dset = 'UR-Filled'
 
-	#Deep_autoencoderflow------------
-
 	autoencooder, model_name, model_type = DAE(img_width = img_width, 
 		img_height = img_height, regularizer_list = regularizer_list)
 
@@ -48,7 +46,7 @@ if __name__ == "__main__":
 		print(DAE_exp.train_data.shape)
 
 		DAE_exp.train()
-		# #deepautoencoder_experiment.init_simple_encoder_decoder()
+		
 
 	
 

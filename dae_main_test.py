@@ -14,6 +14,6 @@ if __name__ == "__main__":
 	img_width, img_height = 64,64
 
 	dae_exp = AEExp(pre_load = pre_load, hor_flip = hor_flip, dset = dset,\
-		img_width = img_width, img_height = img_height, raw = False)
+		img_width = img_width, img_height = img_height)
 
-	dae_exp.test()
+	dae_exp.test(raw = False)
