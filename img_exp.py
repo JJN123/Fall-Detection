@@ -18,31 +18,30 @@ class ImgExp:
 	ImgExp is short for image experiment. An experiment is an object which manages loading of image data, training an 
 	autoencoder, aswell aswell as evaluating the trained model on a test set.
 
+	Attributes:
+		ndarray train_data: must be set by set_train_data setter 
+		model model: Keras model obect
+		int img_width: width of images in experiment
+		int img_height: height of images in experiment
+		str model_name: name of model, used for saving model/model info.
+		int batch_size: Number of samples in a batch
+		str pre_load: path to model save
+		int epochs: how many epochs to train for
+		float zoom_range: as defined in Keras https://keras.io/preprocessing/image/
+		bool hor_flip: if True then horiztonal flipping data augmentation is performed 
+		(if sequence of images, then flips whole sequence)
+		str dset: name of data set to be used in experiment. Current options are:
+				Thermal: A dataset of thermal images
+				UR-Filled: A dataset of kinect depth images with holes filled
+				SDU-Filled: A dataset of kinect depth images with holes filled
+		All datasets contain ADL in training data, and ADL + Falls in test data. 
 	"""
 	def __init__(self, model = None, img_width = None, img_height = None, model_name = 'None',\
 		batch_size = 32, model_type = None, pre_load = None, initial_epoch = 0, epochs = 1, \
 		zoom_range = 0, hor_flip = False, dset = 'Thermal'):
 
-		'''
-		Args:
-			model model: Keras model obect
-			int img_width: width of images in experiment
-			int img_height: height of images in experiment
-			str model_name: name of model, used for saving model/model info.
-			int batch_size: Number of samples in a batch
-			str pre_load: path to model save
-			int epochs: how many epochs to train for
-			float zoom_range: as defined in Keras https://keras.io/preprocessing/image/
-			bool hor_flip: if True then horiztonal flipping data augmentation is performed 
-			(if sequence of images, then flips whole sequence)
-			str dset: name of data set to be used in experiment. Current options are:
-					Thermal: A dataset of thermal images
-					UR-Filled: A dataset of kinect depth images with holes filled
-					SDU-Filled: A dataset of kinect depth images with holes filled
-			All datasets contain ADL in training data, and ADL + Falls in test data. 
-
-		'''
 		
+		self.train_data = None
 		self.dset = dset
 		self.initial_epoch = initial_epoch
 		self.model = model
