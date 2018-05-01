@@ -63,7 +63,7 @@ def create_windowed_arr_per_vid(vids_dict, stride, win_len, img_width, img_heigh
     '''
 
     vid_list = [len(vid['Data'][:]) for vid in list(vids_dict.values())]
-    print(vid_list)
+    #print(vid_list)
 
     num_windowed = sum([int(np.floor(val-win_len)/stride)+1 for val in vid_list])
     #print('num_windowed', num_windowed)
