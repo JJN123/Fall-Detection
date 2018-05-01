@@ -6,8 +6,6 @@ import numpy as np
 from util import *
 import sys
 
-#TODO make this a class? This is data post proccessing, other in JNogasPy is data initialization
-
 
 def create_windowed_arr(arr, stride, window_length):
     """
@@ -46,7 +44,7 @@ def load_data(split_by_vid_or_class = 'Split_by_vid', raw = False, img_width = 6
     
     path = './H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)
 
-    path = 'N:/FallDetection/Fall-Data//H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)
+    path = 'N:/FallDetection/Fall-Data//H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)#Local use only
     
 
     #init_h5py(path)
