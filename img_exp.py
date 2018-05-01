@@ -82,9 +82,11 @@ class ImgExp:
 	    self.model.save(save_string)
 
 
-	def load_train_data(self, raw = False):
+	def set_train_data(self, raw = False):
+		
 		"""
-		Loads train data from memory. Train data will always consist solely of ADL images/image sequences.
+		Loads train data from memory, and assigns it to self.train_data. Train data will 
+		always consist of images/image sequences.
 		"""
 		raise NotImplementedError("Please Implement this method")
 

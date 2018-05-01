@@ -42,8 +42,12 @@ def load_data(split_by_vid_or_class = 'Split_by_vid', raw = False, img_width = 6
     To use this function, need to have downloaded h5py for dset, and placed in ./H5Data directory
     This is, aswell as sorting only function to be used from Git code
     """
-
+    
+    
     path = './H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)
+
+    path = 'N:/FallDetection/Fall-Data//H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)
+    
 
     #init_h5py(path)
 

@@ -2,7 +2,7 @@ from sklearn.metrics import classification_report, roc_auc_score, confusion_matr
 import glob
 import os
 import numpy as np
-from PIL import Image
+
 #from pathlib import Path
 from sklearn.utils import class_weight as cw
 #import h5py
