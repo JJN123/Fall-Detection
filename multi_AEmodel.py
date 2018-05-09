@@ -108,7 +108,7 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 	    os.makedirs(root_s)
 	save_path = root_s + '/' + experiment.model_name + '.csv'
 
-	print(save_path)
+	print('saving results to', save_path)
 	df.to_csv(save_path)
 	#print(df)
 		

@@ -192,7 +192,7 @@ def load_data(split_by_vid_or_class = 'Split_by_vid', raw = False, img_width = 6
                 root_path = dset + '/Processed/' + split_by_vid_or_class
             else:
                 root_path = dset + '/Raw/'+ split_by_vid_or_class
-        print(root_path)
+        print('getting data at group', root_path)
 
         with h5py.File(path, 'r') as hf:
             data_dict = hf[root_path]['Data'][:]

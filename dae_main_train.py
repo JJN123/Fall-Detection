@@ -37,7 +37,7 @@ def init_dae_exp(pre_load = None, regularizer_list = []):
 
 if __name__ == "__main__":
 
-	regularizer_list_list = [['Dropout']]
+	regularizer_list_list = [['Dropout']] # Can use 'L1L2' aswell
 
 	for regularizer_list in regularizer_list_list:
 		DAE_exp = init_dae_exp(regularizer_list = regularizer_list)
