@@ -313,7 +313,18 @@ def sort_frames(frames, dset):
 
 def create_img_data_set(fpath, ht = 64, wd = 64, raw = False, sort = True, dset = 'Thermal'):
         '''
-        Creates data set of all images located at fpath. Sorts images (TODO make try catch for sorting?)
+        Creates data set of all images located at fpath. Sorts images
+
+        Params:
+            str fpath: path to images to be processed
+            bool raw: if True does mean centering and rescaling 
+            bool sort: if True, sorts frames, ie. keeps sequential order, which may be lost due to glob
+            dset: dataset
+
+        Returns:
+            ndarray data: Numpy array of images at fpath. Shape (samples, img_width*img_height),
+            samples isnumber of images at fpath.
+
         '''
         
         print('gathering data at', fpath)
@@ -339,7 +350,7 @@ def create_img_data_set(fpath, ht = 64, wd = 64, raw = False, sort = True, dset 
                 print('proccessing data')
 
                 img=img-np.mean(img)#Mean centering
-                img=img.astype('float32') / 255. #normalize
+                img=img.astype('float32') / 255. #rescaling
 
             data[i,:,:,:]=img
 
