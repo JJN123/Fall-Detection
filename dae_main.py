@@ -8,7 +8,7 @@ import numpy as np
 from keras.models import Sequential
 import glob
 from keras.models import load_model
-import matplotlib.pyplot as plt
+
 
 def init_dae_exp(pre_load = None, regularizer_list = []):
 	batch_size = 16
