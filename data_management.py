@@ -115,8 +115,58 @@ def create_windowed_arr(arr, stride, win_len):
 def load_data(split_by_vid_or_class = 'Split_by_vid', raw = False, img_width = 64, \
     img_height = 64, vid_class = 'NonFall', dset = 'Thermal'):
     """
-    To use this function, need to have downloaded h5py for dset, and placed in ./H5Data directory
-    This is, aswell as sorting only function to be used from Git code
+    Note :to use this function, need to have downloaded h5py for dset, and placed in ./H5Data directory
+    Loads data from h5py file, and reutrns a dictionary, the properties of which depend on params vid_class and split_by_vid_or_class
+
+    Params:
+    	str split_by_vid_or_class: must be one of "Split_by_vid" or "Split_by_class". If "Split_by_vid", the returned dictionary
+    	will have key-value pairs for each video. Otherwise, will have key-value paris for data and labels
+    	bool raw: if true, data will be not processed (mean centering and intensity scaling)
+    	int img_wdith: width of images
+    	int img_height: height of images
+        str dset: dataset to be loaded
+    	str vid_class: must be one of "NonFall" or "Fall". if split_by_vid_or_class is "Split_by_class", will load only class
+    		given by vid_class
+    
+    Returns:
+    	h5py group data_dict: returns h5py nested group containing strucutred view of data. With 
+
+					Split_by_class
+						NonFall
+							Data
+								<HDF5 dataset "Data": shape (samples, img_height*img_width), type "<f8">
+							Labels
+								<HDF5 dataset "Labels": shape (samples,), type "<i4">
+
+					Split_by_video
+						ADL1
+							Data
+								<HDF5 dataset "Data": shape (1397, 4096), type "<f8">
+							Labels
+								<HDF5 dataset "Labels": shape (1397,), type "<i4">
+						ADL2
+							Data
+								<HDF5 dataset "Data": shape (3203, 4096), type "<f8">
+							Labels
+								<HDF5 dataset "Labels": shape (3203,), type "<i4">
+
+							.
+							.
+							.
+						Fall9
+							Data
+								<HDF5 dataset "Data": shape (49, 4096), type "<f8">
+							Labels
+								<HDF5 dataset "Labels": shape (49,), type "<i4">
+						NFFall1
+							Data
+								<HDF5 dataset "Data": shape (839, 4096), type "<f8">
+							Labels
+								<HDF5 dataset "Labels": shape (839,), type "<i4">
+
+        See h5py_init documentation for more details on creation of the H5 Data.
+
+    	
     """
     
     
