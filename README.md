@@ -11,3 +11,6 @@ For example, we can train a deep fully conntected autoendoer (dae) on Thermal da
 
 dae: deep autoencoder
 cae: convolutional autoencoder
+
+{model}_main_{train}
+{model}_main_{test}
