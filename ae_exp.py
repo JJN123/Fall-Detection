@@ -89,14 +89,25 @@ class AEExp(ImgExp):
 
 		self.train_data = self.train_data.reshape(len(self.train_data) ,self.img_width, self.img_height, 1)
 		
-		datagen = ImageDataGenerator(horizontal_flip= self.hor_flip, zoom_range = self.zoom_range)
 
 
 		print('training on data of shape {}, with model {}, with hor_flip {}'.format(self.train_data.shape, self.model_name, self.hor_flip))
 		
-		self.model.fit_generator(datagen.flow(self.train_data, self.train_data,\
-		 batch_size = self.batch_size), steps_per_epoch=len(self.train_data) / self.batch_size, \
-		epochs=self.epochs, callbacks = callbacks_list, verbose = 2)
+		if self.hor_flip == True:
+
+			datagen = ImageDataGenerator(horizontal_flip= self.hor_flip, zoom_range = self.zoom_range)
+			
+			self.model.fit_generator(datagen.flow(self.train_data, self.train_data,\
+			 batch_size = self.batch_size), steps_per_epoch=len(self.train_data) / self.batch_size, \
+			epochs=self.epochs, callbacks = callbacks_list, verbose = 2)
+
+		else:
+			self.model.fit(self.train_data, self.train_data,
+			epochs = self.epochs,
+			batch_size= self.batch_size,
+			shuffle=True,
+			callbacks = callbacks_list, verbose = 2
+			)
 
 		self.save_exp()
 
