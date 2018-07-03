@@ -4,6 +4,9 @@ import numpy as np
 
 
 def init_cae_exp(pre_load = None):
+	'''
+	These are the training setting. 
+	'''
 	batch_size = 32
 
 	hor_flip = True

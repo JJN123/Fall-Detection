@@ -283,36 +283,40 @@ class SeqExp(ImgExp):
                     vid_index += 1
                     
                     if animate == True:
-                        ani = (test_data, recons_seq[:,4,:], std, mean, in_mean, in_std, win_len)
                         ani_dir = './animation/{}/'.format(dset)
-                        if not os.path.isdir(ani_dir):
-                            os.mkdir(ani_dir)
                         ani_dir = ani_dir + '/{}'.format(model_name)
                         if not os.path.isdir(ani_dir):
-                            os.mkdir(ani_dir)
-                        ani.save(ani_dir + '/{}.mp4'.format(Fall_name))
-                        ani.event_source.stop()
-                        del ani
-                        plt.close()
-#                                break
+                            os.makedirs(ani_dir)
+
+                        animate_fall_detect_Spresent(testfall = test_data, recons = recons_seq[:,4,:], \
+                            scores = x_mean, to_save = ani_dir + '/{}.mp4'.format(Fall_name))
+
 
                 #    break
+
                 AUROC_avg = np.mean(ROC_mat, axis = 0)
+                AUROC_std = np.std(ROC_mat, axis = 0)
+                AUROC_avg_std = join_mean_std(AUROC_avg, AUROC_std)
+                print(AUROC_std)
                 AUPR_avg = np.mean(PR_mat, axis = 0)
-                total = np.vstack((AUROC_avg, AUPR_avg))
+                AUPR_std = np.std(PR_mat, axis = 0)
+
+                AUPR_avg_std = join_mean_std(AUPR_avg, AUPR_std)
+                total = np.vstack((AUROC_avg_std, AUPR_avg_std))
+                
                 df = pd.DataFrame(data = total, index = ['AUROC','AUPR'], columns = ['X-STD','X-Mean'] + tol_keys)
-                print(df)
+                
 
                 base = './AEComparisons/all_scores/{}/'.format(self.dset)
 
                 if not os.path.isdir(base):
-                    os.makedirs(base)
+                    os.mkdir(base)
 
                 save_path = './AEComparisons/all_scores/{}/{}.csv'.format(dset, model_name)
-
+                
                 print(save_path)
                 df.to_csv(save_path)
-    
+                
 
 
 

@@ -15,59 +15,47 @@ if not os.path.isdir(root_drive):
     print('Using Sharcnet equivalent of root_drive')
     root_drive = '/home/jjniatsl/project/jjniatsl/Fall-Data'
 
-def get_dir_lists(dset, use_cropped = False):
+
+def get_dir_lists(dset):
     '''
     This shows structure which frames must be in
     '''
-
+    
     if dset == 'Thermal':
-        if use_cropped == True:
-            
-            path_NFFall = root_drive + '/DataforAE-json/test/NonFall/NFFall*/Cropped'
-            path_Fall = root_drive + '/DataforAE-json/test/Fall/Fall*/Cropped'
 
-            vid_dir_list_0 = glob.glob(path_NFFall) #NEeds more works if want seperated by vid ADL Cropped
-            vid_dir_list_1 = glob.glob(path_Fall)             
-        else:
-
-            path_NFFall = root_drive + '/Thermal/DataforAE/test/NonFall/NFFall*'
-            path_Fall = root_drive + '/Thermal/DataforAE/test/Fall/Fall*'
-            path_ADL = root_drive + '/Thermal/DataforAE/train/NonFall/ADL*'
-
-    elif dset == 'UR-Filled':
-        path_NFFall = root_drive + '/UR_Kinect/test/NonFall/filled/NFFall*'
-        path_ADL = root_drive + '/UR_Kinect/train/NonFall/filled/adl*'
-        path_Fall = root_drive + '/UR_Kinect/test/Fall/filled/Fall*'
-
+        path_Fall = root_drive + '/Thermal/Fall/Fall*'
+        path_ADL = root_drive + '/Thermal/NonFall/ADL*'
+    
     elif dset == 'UR':
-        path_NFFall = root_drive + '/UR_Kinect/test/NonFall/NFFall*'
-        path_ADL = root_drive + '/UR_Kinect/train/NonFall/adl*'
-        path_Fall = root_drive + '/UR_Kinect/test/Fall/Fall*'
-
-    elif dset == 'TST':
-
-        path_NFFall = root_drive + '/TST_Kinect_V2/Reorganized/test/NonFall/NFFall*'
-        path_ADL = root_drive + '/TST_Kinect_V2/Reorganized/train/NonFall/ADL*'
-        path_Fall = root_drive + '/TST_Kinect_V2/Reorganized/test/Fall/Fall*'
-
+        path_Fall = root_drive + '/UR_Kinect/Fall/original/Fall*'
+        path_ADL = root_drive + '/UR_Kinect/NonFall/original/adl*'
+    
+    elif dset == 'UR-Filled':
+        path_Fall = root_drive + '/UR_Kinect/Fall/filled/Fall*'
+        path_ADL = root_drive + '/UR_Kinect/NonFall/filled/adl*'
 
     elif dset == 'SDU':
-        path_NFFall = root_drive + '/SDUFall/test/NonFall/NFFall*/Depth'
-        path_ADL = root_drive + '/SDUFall/train/NonFall/ADL*/Depth'
-        path_Fall = root_drive + '/SDUFall/test/Fall/Fall*/Depth'
-
+        path_Fall = root_drive + '/SDUFall/Fall/Fall*/Depth'
+        path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Depth'
+    
     elif dset == 'SDU-Filled':
-        path_NFFall = root_drive + '/SDUFall/test/NonFall/NFFall*/Filled'
-        path_ADL = root_drive + '/SDUFall/train/NonFall/ADL*/Filled'
-        path_Fall = root_drive + '/SDUFall/test/Fall/Fall*/Filled'
+        path_Fall = root_drive + '/SDUFall/Fall/Fall*/Filled'
+        path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Filled'
+        
+        
+    vid_dir_list_Fall = glob.glob(path_Fall)
+    vid_dir_list_ADL = glob.glob(path_ADL)
 
-    vid_dir_list_0 = glob.glob(path_NFFall) + glob.glob(path_ADL)
-    vid_dir_list_1 = glob.glob(path_Fall)
+    if len(vid_dir_list_Fall) == 0:
+        print('no Fall vids found')
+    
+    if len(vid_dir_list_ADL) == 0:
+        print('no ADL vids found')
+    return vid_dir_list_ADL, vid_dir_list_Fall
 
-    return vid_dir_list_0, vid_dir_list_1
 
 def init_videos(img_width = 64, img_height = 64, \
-    use_cropped = False, raw = False, dset = 'Thermal'): 
+     raw = False, dset = 'Thermal'): 
 
     '''
     Creates or overwrites h5py group corresponding to root_path (in body), for the h5py file located at 
@@ -102,11 +90,6 @@ def init_videos(img_width = 64, img_height = 64, \
                     <HDF5 dataset "Data": shape (49, 4096), type "<f8">
                 Labels
                     <HDF5 dataset "Labels": shape (49,), type "<i4">
-            NFFall1
-                Data
-                    <HDF5 dataset "Data": shape (839, 4096), type "<f8">
-                Labels
-                    <HDF5 dataset "Labels": shape (839,), type "<i4">
                 .
                 .
                 .
@@ -115,13 +98,9 @@ def init_videos(img_width = 64, img_height = 64, \
                     <HDF5 dataset "Data": shape (49, 4096), type "<f8">
                 Labels
                     <HDF5 dataset "Labels": shape (49,), type "<i4">
-            NFFall{M}
-                Data
-                    <HDF5 dataset "Data": shape (839, 4096), type "<f8">
-                Labels
-                    <HDF5 dataset "Labels": shape (839,), type "<i4">
 
-            where N is number of ADL videos, and M is number of Fall videos. NFFall are the NonFall frames of a Fall video.
+
+            where N is number of ADL videos, and M is number of Fall videos.
 
     Params:
         bool raw: if true, data will be not processed (mean centering and intensity scaling)
@@ -129,10 +108,10 @@ def init_videos(img_width = 64, img_height = 64, \
         int img_height: height of images
         str dset: dataset to be loaded
 
-
     '''
+def init_videos(img_width = 64, img_height = 64, \
+     raw = False, dset = 'Thermal'): 
     path = root_drive + '/H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height) 
-    
 
     vid_dir_list_0, vid_dir_list_1 = get_dir_lists(dset)
 
@@ -150,11 +129,11 @@ def init_videos(img_width = 64, img_height = 64, \
 
                 for vid_dir in vid_dir_list_1:
                     init_vid(vid_dir = vid_dir, vid_class = 1, img_width = img_width, img_height = img_height,\
-                     hf = root, raw = raw, use_cropped = use_cropped, dset = dset)
+                     hf = root, raw = raw,  dset = dset)
 
                 for vid_dir in vid_dir_list_0: 
                     init_vid(vid_dir = vid_dir, vid_class = 0, img_width = img_width, img_height = img_height, \
-                        hf = root, raw = raw, use_cropped = use_cropped, dset = dset)
+                        hf = root, raw = raw,  dset = dset)
 
     if os.path.isfile(path):
         hf = h5py.File(path, 'a')
@@ -175,7 +154,7 @@ def init_videos(img_width = 64, img_height = 64, \
 
 
 def init_vid(vid_dir = None, vid_class = None, img_width = 32, img_height = 32,\
-     hf = None, raw = False, use_cropped = False, dset = 'Thermal'):
+     hf = None, raw = False,  dset = 'Thermal'):
     '''
     helper function for init_videos. Initialzies a single video.
 
@@ -189,100 +168,46 @@ def init_vid(vid_dir = None, vid_class = None, img_width = 32, img_height = 32,\
     print('initializing vid at', vid_dir)
 
     data = create_img_data_set(fpath = vid_dir, ht = img_height, wd = img_width, raw = raw, sort = True, dset = dset)
-    labels = np.array([vid_class] * len(data))
+    labels = np.zeros(len(data))
 
     if dset == 'SDU' or dset == 'SDU-Filled':
         vid_dir_name = os.path.basename(os.path.dirname(vid_dir))
-        
     else:
         vid_dir_name = os.path.basename(vid_dir)
     print('vid_dir_name', vid_dir_name)
     grp = hf.create_group(vid_dir_name)
 
+
+
+    if vid_dir_name in ['Fall' + str(i) for i in range(201)]: #201 is max fall index across all vids
+        print('setting fall start')
+        Fall_start, Fall_stop = get_fall_indeces(vid_dir_name, dset)
+        labels[Fall_start:Fall_stop + 1] = 1
+    
     grp['Labels'] = labels
     grp['Data'] = data
 
-    if vid_dir_name in ['Fall' + str(i) for i in range(201)]: #201 is max fall index across all vids
-        Fall_start, Fall_stop = get_fall_indeces(vid_dir, use_cropped, dset)
-        grp['Data'].attrs['Fall start index'] = Fall_start
-
-
-
-def find_start_index_disc(start_frame_index, NF_frames_indeces):
-    '''
-    gets real index(not frame index) where Fall starts in NFFall array
-    '''
+def get_fall_indeces(Fall_name, dset):
+    root_dir = 'N:/FallDetection/Fall-Data/'
     
-    for i in range(len(NF_frames_indeces)):
-        index = NF_frames_indeces[i]
-        if index>start_frame_index:
-            return i
-        else:
-            return start_frame_index
-
-def get_fall_indeces(Fall_vid_dir = None, use_cropped = False, dset = 'Thermal'):
-    """
-    input Fall not NFFall (ie. recreate fall opt1, with opt3 labels)
-    
-    Gets start/stop indices accoutnign for potentiol discont's from cropping
-    """
-    if dset == 'Thermal' or dset == 'UR' or dset == 'UR-Filled':
-        split_char = '-'
-    else:
-        split_char = '_'
-
-    print('Fall_vid_dir', Fall_vid_dir)
-    Fall_vid_dir = Fall_vid_dir.replace('\\','/')
-    base_Fall = Fall_vid_dir
-    
-    basename = os.path.basename(Fall_vid_dir)
-    print(basename)
-    root = os.path.dirname(os.path.dirname(Fall_vid_dir))
-    print(root)
-    base_NFFall = root + '/NonFall/NF' + basename
+    if dset == 'Thermal':
+        labels_dir = root_dir + 'Thermal/Labels.csv'
         
-    frames_opt3_Fall = glob.glob( base_Fall + '/*.jpg') + \
-        glob.glob( base_Fall + '/*.png')
+    elif dset == 'UR' or dset == 'UR-Filled':
+        labels_dir = root_dir + 'UR_Kinect/Labels.csv'
         
-    frames_opt3_NFFall = glob.glob( base_NFFall + '/*.jpg') + \
-        glob.glob( base_NFFall + '/*.png')
-   
+    elif dset == 'SDU' or dset == 'SDU-Filled':
+        labels_dir = root_dir + '/SDUFall/Labels.csv'
+            
+    #print(labels_dir)
+    import pandas as pd
+    my_data = pd.read_csv(labels_dir, sep=',', header = 0, index_col = 0)
     
-    #print("\n".join(frames_opt3_Fall))
-    #print('{} opt3 fall frames found'.format(len(frames_opt3)))
-    
-    frames_opt3_Fall = sort_frames(frames_opt3_Fall, dset)
-    frames_opt3_NFFall = sort_frames(frames_opt3_NFFall, dset)
-
-    # if dset == 'TST': #Sortign frames, glob returns unsorted
-    #     frames_opt3_Fall = sorted(frames_opt3_Fall, key = lambda x: int(x.split(split_char)[-1].split('.')[0]))
-
-
-    frames_opt3_Fall[0] = frames_opt3_Fall[0].replace('\\', '/')
-    print('frames_opt3_Fall[0]', frames_opt3_Fall[0])
-
-    start_frame_ind = int(os.path.basename(frames_opt3_Fall[0]).split('.')[0].split(split_char)[-1])
-    #start_frame_ind = int(frames_opt3_Fall[0].split(split_char)[-1].split('.')[0]) #Thermal
-    print('start_frame_ind', start_frame_ind)
-    end_frame_index = start_frame_ind + len(frames_opt3_Fall) #-1? TODO Not used 
-    
-    #print(frames_opt3_NFFall)
-    NF_frame_indices = [int(os.path.basename(frames_opt3_NFFall[i]).split('.')[0].split(split_char)[-1]) \
-                            for i in range(len(frames_opt3_NFFall))]
-    
-    if len(frames_opt3_NFFall) > 0:
-        new_fall_start_ind = find_start_index_disc(start_frame_ind,\
-                                                   NF_frame_indices)
-    else:
-        print('no NFF frames found')
-        new_fall_start_ind = start_frame_ind
-    
-    print('new_fall_start_ind, len(frames_opt3_Fall)', new_fall_start_ind, len(frames_opt3_Fall))
-    new_end_frame_index = new_fall_start_ind + len(frames_opt3_Fall)
-    
-    #New means accounts for discont of cropping
-    
-    return new_fall_start_ind, new_end_frame_index
+    start,stop = my_data.loc[Fall_name]
+    print('start,stop', start,stop)
+ 
+    #print(my_data)
+    return start,stop
         
 
 def sort_frames(frames, dset):
@@ -309,6 +234,14 @@ def sort_frames(frames, dset):
             except ValueError:
                 print('failed to sort vid frames, trying again....')
                 pass
+
+        elif dset == 'FallFree' or 'FallFree-Filled':
+            try:
+                frames = sorted(frames, key = lambda x: int(x.split('_')[2]))
+            except ValueError:
+                print('failed to sort vid frames, trying again....')
+                pass
+
         return frames
 
 def create_img_data_set(fpath, ht = 64, wd = 64, raw = False, sort = True, dset = 'Thermal'):
@@ -327,14 +260,15 @@ def create_img_data_set(fpath, ht = 64, wd = 64, raw = False, sort = True, dset 
 
         '''
         
-        print('gathering data at', fpath)
+       # print('gathering data at', fpath)
         fpath = fpath.replace('\\', '/')
+        #print(fpath+'/*.png')
         frames = glob.glob(fpath+'/*.jpg') + glob.glob(fpath+'/*.png')
 
         if sort == True:
             frames = sort_frames(frames, dset)
 
-       # print("\n".join(frames)) #Use this to check if sorted
+        #print("\n".join(frames)) #Use this to check if sorted
 
         data=np.zeros((frames.__len__(),ht,wd,1))
         for x,i in zip(frames, range(0,frames.__len__())):
@@ -347,20 +281,20 @@ def create_img_data_set(fpath, ht = 64, wd = 64, raw = False, sort = True, dset 
             img=img.reshape(ht,wd,1)
 
             if raw == False:
-                print('proccessing data')
+                #print('proccessing data')
 
                 img=img-np.mean(img)#Mean centering
                 img=img.astype('float32') / 255. #rescaling
 
             data[i,:,:,:]=img
 
-        data = data.reshape((len(data), np.prod(data.shape[1:]))) #Flatten the images
+       # data = data.reshape((len(data), np.prod(data.shape[1:]))) #Flatten the images
 
         print('data.shape', data.shape)
 
         return data
 
-def init_data_by_class(vid_class = 'NonFall', train_or_test = 'train', dset = 'Thermal',\
+def init_data_by_class(vid_class = 'NonFall', dset = 'Thermal',\
         raw = False, img_width = 64, img_height = 64, use_cropped = False): 
 
     '''
@@ -384,44 +318,39 @@ def init_data_by_class(vid_class = 'NonFall', train_or_test = 'train', dset = 'T
     '''
 
     ht,wd = img_width, img_height
-    if use_cropped == False:
-        if dset == 'Thermal':
-            if vid_class == 'NonFall':
-                fpath= root_drive + '/Thermal/DataforAE' + \
-                '/'+ train_or_test +'/' + vid_class + '/ADL*'               
-            else:
-                fpath= root_drive + '/DataforAE' + \
-                '/'+ train_or_test +'/Fall/Fall*' 
-
-        elif dset == 'UR-Filled': #TODO update!
-
-            fpath = root_drive + '/UR_Kinect' + \
-	            '/'+ train_or_test +'/' + vid_class + '/filled/adl*'
-
-        elif dset == 'UR':
-            fpath = root_drive + '/UR_Kinect' + \
-	            '/'+ train_or_test +'/' + vid_class + '/adl*'
-
-        elif dset == 'TST':
-            fpath = root_drive + '/TST_Kinect_V2/Reorganized/train/NonFall/ADL*'
-
-        elif dset == 'SDU':
-            fpath = root_drive + '/SDUFall/{}/{}/ADL*/Depth'.format(train_or_test, vid_class)
-
-        elif dset == 'SDU-Filled':
-            fpath = root_drive + '/SDUFall/{}/{}/ADL*/Filled'.format(train_or_test, vid_class)
+    if dset == 'Thermal':
+        
+        if vid_class == 'NonFall':
+            fpath= root_drive + '/Thermal/{}/ADL*'.format(vid_class)            
+        elif vid_class == 'Fall':
+            fpath= root_drive + '/Thermal/{}/Fall*'.format(vid_class)           
+        else:
+            print('invalid vid class') 
+            return
 
 
-    elif vid_class == 'NonFall': #use cropped
+    elif dset == 'UR-Filled': 
 
-        if dset == 'Thermal':
-            fpath= root_Drive + '/DataforAE-json' + \
-            '/'+ train_or_test +'/' + vid_class + '/' + 'Cropped'
+        if vid_class == 'NonFall':
+            fpath= root_drive + '/UR_Kinect/{}/filled/adl*'.format(vid_class)            
+        else:
+            fpath= root_drive + '/UR_Kinect/{}/filled/Fall*'.format(vid_class)            
 
 
-    elif vid_class == 'Fall':#use cropped
-        fpath= root_drive + '/DataforAE-json' + \
-    '/'+ train_or_test +'/' + vid_class + '/Fall*/' + 'Cropped'
+    elif dset == 'UR':
+
+        if vid_class == 'NonFall':
+            fpath= root_drive + '/UR_Kinect/{}/original/adl*'.format(vid_class)            
+        else:
+            fpath= root_drive + '/UR_Kinect/{}/original/Fall*'.format(vid_class)            
+
+
+    elif dset == 'SDU':
+        fpath = root_drive + '/SDUFall/{}/ADL*/Depth'.format(vid_class)
+
+    elif dset == 'SDU-Filled':
+        fpath = root_drive + '/SDUFall/{}/ADL*/Filled'.format(vid_class)
+        
 
     data = create_img_data_set(fpath, ht, wd, raw, False) #Don't need to sort
 

@@ -6,8 +6,7 @@ import numpy as np
 #from pathlib import Path
 from sklearn.utils import class_weight as cw
 #import h5py
-from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
-from keras.utils.io_utils import HDF5Matrix
+import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import cv2
 import h5py
@@ -76,6 +75,9 @@ def get_output(labels, predictions, data_option = None, t=0.5, to_plot = False, 
     return AUROC, conf_mat, g_mean, AUPR
 
 def MSE(y, t):
+    '''
+    Mean sqaured error
+    '''
     y, t = y.reshape(len(y), np.prod(y.shape[1:])), t.reshape(len(t), np.prod(t.shape[1:]))
     
     return np.mean(np.power(y-t,2), axis=1)
@@ -123,7 +125,7 @@ def play_frames(frames, decoded_frames = [], labels = []):
             cv2.resizeWindow('decoded', 600,600)
             cv2.imshow('decoded', decoded_frames[i].reshape(ht,wd))
 
-        cv2.waitKey(30)
+        cv2.waitKey(10)
     cv2.destroyAllWindows()
 
 #init_videos(img_width = 64, img_height = 64, data_option = 'Option1')
@@ -166,7 +168,7 @@ def generate_vid_keys(vid_base_name, dset):
             num_vids = 1000
         else:
             print('invalid basename')
-    if dset == 'UR' or dset =='UR-Filled' and vid_base_name == 'ADL':
+    if (dset == 'UR' or dset =='UR-Filled') and vid_base_name == 'ADL':
         keys = ['adl-{num:02d}-cam0-d'.format(num = i+1) for i in range(num_vids)]
     else:
         keys = [vid_base_name + str(i+1) for i in range(num_vids)]
@@ -275,6 +277,12 @@ def restore_Fall_vid(data_dict, Fall_name, NFF_name):
     return vid_total, labels_total
 
 def get_thresholds_helper(RE, omega = 1.5):
+        '''
+        Gets all threshodls from RE
+
+        Params:
+            ndarray RE: reconstruction error of training data
+        '''
 
         Q_3, Q_1 = np.percentile(RE, [75 ,25])
         IQR = Q_3 - Q_1
@@ -285,3 +293,107 @@ def get_thresholds_helper(RE, omega = 1.5):
         thresholds = [t1, t2, t3, t4, t5, t6]
 
         return thresholds
+
+
+def animate_fall_detect_Spresent(testfall, recons, scores, win_len = 1, threshold = 0, to_save = './test.mp4'):
+    '''
+    Pass in data for single video, recons is recons frames, scores is x_std or x_mean etc.
+    Threshold is RRE, mean, etc..
+    '''
+    import matplotlib.gridspec as gridspec
+    gs = gridspec.GridSpec(2,2,height_ratios = [2,1])
+    
+    ht, wd = 64,64
+
+    eps = .0001
+    #setup figure
+    #fig = plt.figure()
+    fig, ((ax1,ax3)) = plt.subplots(1,2,figsize = (6,6))
+
+    ax1.axis('off')
+    ax3.axis('off')
+    #ax1=fig.add_subplot(2,2,1)
+
+    ax1=fig.add_subplot(gs[0,0])
+    ax1.set_title("Original")
+    ax1.set_xticks([])
+    ax1.set_yticks([])
+
+
+    #ax2=fig.add_subplot(gs[-1,0])
+    ax2=fig.add_subplot(gs[1,:])
+
+    #ax2.set_yticks([])
+    #ax2.set_xticks([])
+    ax2.set_ylabel('Score')
+    ax2.set_xlabel('Frame')
+
+    if threshold != 0:
+        ax2.axhline(y= threshold, color='r', linestyle='dashed', label = 'RRE')
+        ax2.legend()
+
+    #ax3=fig.add_subplot(2,2,2)
+    ax3=fig.add_subplot(gs[0,1])
+    ax3.set_title("Reconstruction")
+    ax3.set_xticks([])
+    ax3.set_yticks([])
+
+
+    #set up list of images for animation
+    ims=[]
+
+    for time in range(len(testfall)-(win_len-1)):
+        im1 = ax1.imshow(testfall[time].reshape(ht,wd), cmap = 'gray', aspect = 'equal')
+        figure= recons[time].reshape(ht,wd)
+        im2 = ax3.imshow(figure, cmap = 'gray', aspect = 'equal')
+
+        #print("time={} mse={} std={}".format(time,mse_difficult[time],std))
+        if time>0:
+
+            scores_curr = scores[0:time]
+            
+            fall_pts_idx = np.argwhere(scores_curr > threshold)
+            nonfall_pts_idx = np.argwhere(scores_curr <= threshold)
+
+            fall_pts =scores_curr[fall_pts_idx]
+            nonfall_pts =scores_curr[nonfall_pts_idx]
+
+            if fall_pts_idx.shape[0] > 0:
+                #pass
+                plot_r, = ax2.plot(fall_pts_idx, fall_pts, 'r.')
+                plot, = ax2.plot(nonfall_pts_idx, nonfall_pts,'b.')
+            else:
+                
+                plot, = ax2.plot(scores_curr,'b.')
+    
+        else:
+            plot, = ax2.plot(scores[0],'b.')
+            plot_r, = ax2.plot(scores[0],'b.')
+            
+
+        ims.append([im1, plot, im2, plot_r]) #list of ims
+
+    #run animation
+    ani = animation.ArtistAnimation(fig,ims, interval= 40, repeat=False)
+    #plt.tight_layout()
+    gs.tight_layout(fig)
+    ani.save(to_save)
+
+    ani.event_source.stop()
+    del ani
+    plt.close()
+    #plt.show()
+    #return ani
+
+def join_mean_std(mean, std):
+    '''
+    mean(std) for matrix of means and stds (same size)
+    '''
+    new = np.ones(std.shape, dtype = object)
+    for row in range(std.shape[0]):
+        for col in range(std.shape[1]):
+            print(row,col)
+            print(str(mean[row,col]), str(std[row,col]))
+            new[row,col] = str(mean[row,col]) + '(' + str(std[row,col]) + ')'
+    return new
+        

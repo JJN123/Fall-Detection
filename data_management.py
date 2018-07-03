@@ -153,16 +153,15 @@ def load_data(split_by_vid_or_class = 'Split_by_vid', raw = False, img_width = 6
 							.
 							.
 							.
-						Fall9
+						Fall1
 							Data
 								<HDF5 dataset "Data": shape (49, 4096), type "<f8">
 							Labels
 								<HDF5 dataset "Labels": shape (49,), type "<i4">
-						NFFall1
-							Data
-								<HDF5 dataset "Data": shape (839, 4096), type "<f8">
-							Labels
-								<HDF5 dataset "Labels": shape (839,), type "<i4">
+                            .
+                            .
+                            .
+
 
         See h5py_init documentation for more details on creation of the H5 Data.
 

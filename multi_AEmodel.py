@@ -27,7 +27,7 @@ if not os.path.isdir(root_drive):
 
 
 def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mean', models_dir = None,\
-  dset = 'Thermal', agg_type = None, raw = False):
+  dset = 'Thermal', agg_type = None, raw = False, animate= False):
 	'''
 	TODO auto initialize data if component not found etc.
 	'''
@@ -43,31 +43,25 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 	features_list = []
 	labels_list = []
 	RE_l = []
-	vid_dir_keys_NFF = generate_vid_keys('NFFall', experiment.dset) #ensures sorted order
-	vid_dir_keys_Fall = generate_vid_keys('Fall', experiment.dset)
+
+	vid_dir_keys_Fall = generate_vid_keys('Fall', experiment.dset) #Ensures sorted order of fall vids
 	
 	path = root_drive + '/H5Data/Data_set-{}-imgdim{}x{}.h5'.format(experiment.dset, experiment.img_width, experiment.img_height)
 
 	Fall_stop = 'None' #Make th
 	with h5py.File(path, 'r') as hf:
-		if raw == False:
-			data_dict = hf[dset + '/Processed/Split_by_video']
-		else:
-			data_dict = hf[dset + '/Raw/Split_by_video']
-
-		RE_old = 0
-		for Fall_name, NFF_name in zip(vid_dir_keys_Fall, vid_dir_keys_NFF):
+		data_dict = hf[dset + '/Processed/Split_by_video']
+		
+		for Fall_name in vid_dir_keys_Fall:
 
 			if Fall_name == Fall_stop:
 				print('breaking at ', Fall_name)
 				break
 
-			vid_total, labels_total = restore_Fall_vid(data_dict, Fall_name, NFF_name)
+			vid_total = data_dict[Fall_name]['Data'][:]
+			labels_total = data_dict[Fall_name]['Labels'][:]
 
 			experiment.test_data = vid_total
-			#experiment.play_frames_with_reconstructions(to_save = Fall_name) #DISPLAY-----------------
-			# plt.plot(labels_total)
-			# plt.show()
 			display_name = Fall_name
 			vid_name_list.append(display_name)
 			print('testing on', display_name)
@@ -75,28 +69,28 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 			next_row, RE = get_stats_for_vid(test_data = vid_total, test_labels = labels_total, \
 				experiment = experiment, thresholds = thresholds, metric = metric, \
 				Fall_name = Fall_name, dset = dset, agg_type = agg_type)
-			RE_l.append(RE)
 
-			#RE = experiment.get_MSE(vid_total)
+			RE_l.append(RE)
 
 			data_matrix.append(next_row)
 
-	
-	# RE_dir = './RE/{}/{}/'.format(experiment.dset, os.path.basename(experiment.pre_load).split('.')[0])
 
-	# if not os.path.isdir(RE_dir):
-	#     os.mkdir(RE_dir)
-
-	# RE_save = RE_dir + 'test_RE.npy'
-	# RE_l = np.array(RE_l)
-	# np.save(RE_save, RE_l)
+			if animate == True:
+				ani_dir = './animation/{}/'.format(dset)
+				ani_dir = ani_dir + '/{}'.format(experiment.model_name)
+				if not os.path.isdir(ani_dir):
+					os.makedirs(ani_dir)
+				preds = experiment.model.predict(vid_total.reshape(len(vid_total), experiment.img_width, experiment.img_height, 1))
+				animate_fall_detect_Spresent(testfall = vid_total, recons = preds, scores = RE, to_save = ani_dir + '/{}.mp4'.format(Fall_name))
 
 	headers = data_matrix.pop(0)
 	print(headers)
 	print(np.array(data_matrix).shape)
 	df = pd.DataFrame(data_matrix, index = vid_name_list, columns=headers)
-	
 	df.loc['mean'] = df.mean()
+
+	df.loc['std'] = df[0:-1].std()
+	df = df.round(2)
 
 
 	if agg_type != None:
@@ -151,6 +145,7 @@ def get_stats_for_vid(test_data = None, experiment = None, thresholds = None, me
 	next_row.append(AUROC)
 	next_row.append(AUPR)
 	#print(next_row)
+
 	return next_row, RE
 
 

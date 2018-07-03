@@ -5,6 +5,10 @@ import numpy as np
 
 
 def init_dae_exp(pre_load = None, regularizer_list = []):
+
+	'''
+	These are the training setting. 
+	'''
 	batch_size = 16
 		
 	epochs = 1

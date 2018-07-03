@@ -56,7 +56,7 @@ class AEExp(ImgExp):
 		plt.close()
 
 
-	def train(self, sample_weight=None):
+	def train(self, sample_weight=None, verbose = 2):
 		"""
 		trains the autoencoder model on data loaded from load_train_data. This data is non-sequential; that is,
 		frames are reconstructed one by one. Reconstruction error (MSE) is minimized. Checkpoints and logs are saved to
@@ -99,22 +99,22 @@ class AEExp(ImgExp):
 			
 			self.model.fit_generator(datagen.flow(self.train_data, self.train_data,\
 			 batch_size = self.batch_size), steps_per_epoch=len(self.train_data) / self.batch_size, \
-			epochs=self.epochs, callbacks = callbacks_list, verbose = 2)
+			epochs=self.epochs, callbacks = callbacks_list, verbose = verbose, initial_epoch = self.initial_epoch)
 
 		else:
 			self.model.fit(self.train_data, self.train_data,
 			epochs = self.epochs,
 			batch_size= self.batch_size,
 			shuffle=True,
-			callbacks = callbacks_list, verbose = 2
+			callbacks = callbacks_list, verbose = verbose, initial_epoch = self.initial_epoch
 			)
 
 		self.save_exp()
 
-	def test(self, raw = False):
+	def test(self, raw = False, animate = False):
 
 		get_stats_for_all_vids(experiment = self,\
-					metric = 'AUC', dset = self.dset, raw = raw)
+					metric = 'AUC', dset = self.dset, raw = raw, animate = animate)
 
 	def get_MSE(self, test_data):
 
@@ -133,7 +133,7 @@ class AEExp(ImgExp):
 		else:
 			test_data = test_data.reshape((len(test_data), np.prod(test_data.shape[1:])))
 		decoded_imgs = self.model.predict(test_data)
-
+		print('max, min:',np.amax(decoded_imgs), np.amin(decoded_imgs))
 
 		RE = MSE(test_data, decoded_imgs)
 		return RE

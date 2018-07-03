@@ -7,6 +7,9 @@ from seq_exp import SeqExp
 
 
 if __name__ == "__main__":
+        '''
+        These are the training setting. 
+        '''
         dset = 'UR-Filled'
         img_width, img_height, win_len, epochs = 64,64, 8,50
         stride = 1

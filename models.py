@@ -21,6 +21,7 @@ def DAE(img_width = 64, img_height = 64, regularizer_list = []):
 	list regularizer_list: List of strings indicating which regulairzers to use, options are 
 	'L1L2' and 'Dropout'. Can use both. Assume regularizer list ordered like ['L1L2', 'Dropout']
 	"""
+	encoding_dim = 10
 	encoding_dim = 500
 	flatenned_dim = img_width*img_height
 	input_shape = (img_width, img_height, 1)
@@ -116,7 +117,6 @@ def CAE(img_width =64, img_height = 64, regularizer_list = []):
 	return model, model_name, model_type
 
 
-
 def C3D_AE(img_width, img_height, win_length):
 	"""
 	int win_length: Length of window of frames
@@ -134,12 +134,12 @@ def C3D_AE(img_width, img_height, win_length):
 	x = Conv3D(8, (5, 3, 3), activation='relu', padding='same')(x)
 	x = MaxPooling3D((temp_pool, 2, 2), padding='same')(x) #4
 	x = Dropout(0.25)(x)
-	x = Conv3D(8, (3, 3, 3), activation='relu', padding='same')(x)
+	x = Conv3D(8, (5, 3, 3), activation='relu', padding='same')(x)
 	encoded = MaxPooling3D((temp_pool, 2, 2), padding='same')(x) #2
 
 	# at this point the representation is (4, 4, 8) i.e. 128-dimensional
 
-	x = Conv3D(8, (3, 3, 3), activation='relu', padding='same')(encoded)
+	x = Conv3D(8, (5, 3, 3), activation='relu', padding='same')(encoded)
 	x = UpSampling3D((temp_pool, 2, 2))(x) #4
 	x = Conv3D(8, (5, 3, 3), activation='relu', padding='same')(x)
 	x = UpSampling3D((temp_pool, 2, 2))(x) #8
@@ -160,7 +160,6 @@ def C3D_AE(img_width, img_height, win_length):
 	model = autoencoder
 
 	return model, model_name, model_type
-
 
 
 def CAE3D(img_width, img_height, win_length):
