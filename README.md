@@ -26,5 +26,8 @@ To generate an animation, such as shown in the above GIF, run dae_main_test.py, 
 dae: deep autoencoder
 cae: convolutional autoencoder
 
+Requirements:
+
+
 {model}_main_{train}
 {model}_main_{test}
