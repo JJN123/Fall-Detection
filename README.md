@@ -9,6 +9,13 @@ Falls are detected by first training an autoencoder to minimize recontruction er
 
 Code Usage:
 
+The code base is split into two main subsets
+
+{model}_main_{train}
+{model}_main_{test}
+
+which will execute training, or testing, respectively, with model {model}. 
+
 Training:
 
 To use this code, first run one of the training modules. A model is then saved to Models/Dataset/....
@@ -29,5 +36,4 @@ cae: convolutional autoencoder
 Requirements:
 
 
-{model}_main_{train}
-{model}_main_{test}
+
