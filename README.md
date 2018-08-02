@@ -7,7 +7,7 @@ This is code developed while working at IATSL. This code can be used to detect f
 Falls are detected by first training an autoencoder to minimize recontruction error of ADL (activities of dailty living) video frames. The reconstruction error for falls should thus be higher, as is shown in the above GIF.
 
 
-Code Usage:
+**Code Usage:**
 
 The code base is split into two main subsets
 
