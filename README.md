@@ -16,16 +16,16 @@ The code base is split into two main subsets
 
 which will execute training, or testing, respectively, with model {model}. 
 
-Training:
+**Training:**
 
 To use this code, first run one of the training modules. A model is then saved to Models/Dataset/....
 For example, we can train a deep fully conntected autoendoer (dae) on Thermal data as follows. First, run dae_main_train.py with a choice of dataset. For instance to train on Thermal data, set dset = 'Thermal' in dae_main_train.py.
 
-Testing:
+**Testing:**
 
 to evaluate the model, run the correpsonding test module. The results of testing will be saved to AEComparisons. Once training has completed, find the saved model under Models/Thermal/{model_name}. To evaluate the model, set the variable pre_load in dae_main_test.py to the path to this model. Run dae_main_test.py and find the results in AEComparisons/AUC/Thermal/{model_name}.
 
-Generating Animation:
+**Generating Animation:**
 
 To generate an animation, such as shown in the above GIF, run dae_main_test.py, with animate option set to True. An animation (mp4 file) for each testing video will be saved to animation/Thermal/{model_name}.
 
@@ -35,5 +35,5 @@ cae: convolutional autoencoder
 
 Requirements:
 
-
+TODO
 
