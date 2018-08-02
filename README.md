@@ -20,7 +20,7 @@ to evaluate the model, run the correpsonding test module. The results of testing
 
 Generating Animation:
 
-To generate an animation, such as shown in the above GIF, run dae_main_test.py, with animate option set to True. An animation (mp4 file) for each testing video will be saved to 
+To generate an animation, such as shown in the above GIF, run dae_main_test.py, with animate option set to True. An animation (mp4 file) for each testing video will be saved to animation/Thermal/{model_name}.
 
 
 dae: deep autoencoder
