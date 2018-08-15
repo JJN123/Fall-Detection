@@ -20,7 +20,7 @@ class AEExp(ImgExp):
 	All params are attributes, and are initialized in ImgExp parent class.
 	"""
 
-	def __init__(self, model = None, img_width = None, img_height = None, \
+	def __init__(self, model = None, img_width = 64, img_height = 64, \
 		model_name = 'None', 
 		batch_size = 32,\
 		 model_type = None, \

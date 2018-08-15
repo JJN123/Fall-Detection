@@ -15,10 +15,9 @@ from data_management import *
 from sklearn.metrics import average_precision_score
 from keras import backend as K
 
-
 #Better name fot his file? Maybe just thresh tools?
 
-root_drive = 'N:/FallDetection/Fall-Data/' 
+root_drive = 'N:/FallDetection/Jacob/Fall-Data/' 
 
 if not os.path.isdir(root_drive):
     print('Using Sharcnet equivalent of root_drive')
@@ -31,6 +30,7 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 	'''
 	TODO auto initialize data if component not found etc.
 	'''
+
 		
 	if thresholds != None:
 		data_matrix = [['Mean Reconstruction Error', 'Mean Reconstruction Error + 1 :',\
@@ -49,9 +49,10 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 	path = root_drive + '/H5Data/Data_set-{}-imgdim{}x{}.h5'.format(experiment.dset, experiment.img_width, experiment.img_height)
 
 	Fall_stop = 'None' #Make th
+
 	with h5py.File(path, 'r') as hf:
 		data_dict = hf[dset + '/Processed/Split_by_video']
-		
+		f_idx=0
 		for Fall_name in vid_dir_keys_Fall:
 
 			if Fall_name == Fall_stop:
@@ -68,7 +69,8 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 
 			next_row, RE = get_stats_for_vid(test_data = vid_total, test_labels = labels_total, \
 				experiment = experiment, thresholds = thresholds, metric = metric, \
-				Fall_name = Fall_name, dset = dset, agg_type = agg_type)
+				Fall_name = Fall_name, dset = dset, agg_type = agg_type, f_idx = f_idx)
+			f_idx+=1
 
 			RE_l.append(RE)
 
@@ -108,7 +110,7 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 		
 
 def get_stats_for_vid(test_data = None, experiment = None, thresholds = None, metric = None, \
-	test_labels = None, Fall_name = None, dset = None, agg_type = None):
+	test_labels = None, Fall_name = None, dset = None, agg_type = None, f_idx = None):
 		
 	if agg_type != None: #Must window if agg_type != None
 		print('windowing data')
@@ -116,9 +118,10 @@ def get_stats_for_vid(test_data = None, experiment = None, thresholds = None, me
 		test_data = test_data.reshape(len(test_data), img_width, img_height, 1)
 		test_data = create_windowed_arr(test_data, stride, win_len)
 
+	labels = test_labels
 	RE = experiment.get_MSE(test_data)
 
-	labels = test_labels
+
 	#print('np.amin(RE), np.amax(RE)', np.amin(RE), np.amax(RE))
 	next_row = []
 	

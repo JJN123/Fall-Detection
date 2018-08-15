@@ -36,7 +36,7 @@ class ImgExp:
 				SDU-Filled: A dataset of kinect depth images with holes filled
 		All datasets contain ADL in training data, and ADL + Falls in test data. 
 	"""
-	def __init__(self, model = None, img_width = None, img_height = None, model_name = 'None',\
+	def __init__(self, model = None, img_width = 64, img_height = 64, model_name = 'None',\
 		batch_size = 32, model_type = None, pre_load = None, initial_epoch = 0, epochs = 1, \
 		zoom_range = 0, hor_flip = False, dset = 'Thermal'):
 

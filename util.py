@@ -142,6 +142,14 @@ def generate_vid_keys(vid_base_name, dset):
         else:
             print('invalid basename')     
 
+    if dset == 'Thermal-Dummy':
+        if vid_base_name == 'Fall' or vid_base_name =='NFFall':
+            num_vids = 2
+        elif vid_base_name == 'ADL':
+            num_vids = 2
+        else:
+            print('invalid basename')    
+
     elif dset == 'UR' or dset == 'UR-Filled':
         if vid_base_name == 'Fall' or vid_base_name =='NFFall':
             num_vids = 30
@@ -341,8 +349,9 @@ def animate_fall_detect_Spresent(testfall, recons, scores, win_len = 1, threshol
 
     #set up list of images for animation
     ims=[]
-
-    for time in range(len(testfall)-(win_len-1)):
+   
+    for time in range(len(testfall)-(win_len-1)-1):
+        
         im1 = ax1.imshow(testfall[time].reshape(ht,wd), cmap = 'gray', aspect = 'equal')
         figure= recons[time].reshape(ht,wd)
         im2 = ax3.imshow(figure, cmap = 'gray', aspect = 'equal')
@@ -389,11 +398,98 @@ def join_mean_std(mean, std):
     '''
     mean(std) for matrix of means and stds (same size)
     '''
-    new = np.ones(std.shape, dtype = object)
-    for row in range(std.shape[0]):
-        for col in range(std.shape[1]):
-            print(row,col)
-            print(str(mean[row,col]), str(std[row,col]))
-            new[row,col] = str(mean[row,col]) + '(' + str(std[row,col]) + ')'
+    mean_fl = mean.flatten()
+    std_fl = std.flatten()
+    new = np.ones(std_fl.shape, dtype = object)
+
+    for i in range(len(std_fl)):
+
+        new[i] = "{:.2f}({:.2f})".format(mean_fl[i], std_fl[i])
+
+    new = np.reshape(new, mean.shape)
+
+
     return new
+
         
+def gather_auc_avg_per_tol(inwin_mean, inwin_std, labels, win_len = 8):
+    '''
+    inwin_mean/std are mean over the windows for a video (1,num_windows = vid_length - win_len-1)
+
+    Retruns array of shape (2,win_len = tolerance*2), which are scores for each tolerance in range(win_len),
+    *2 for std and mean, one row
+    for AUROC, one for AUPR
+
+    tol1_mean, tol1_std, tol2_men, tol2_std.....
+    '''
+    img_width, img_height = 64,64
+    stride= 1
+
+    tol_mat = np.zeros((2,2*win_len))
+    tol_list_ROC = []
+    tol_list_PR = []
+    
+    #print(tol_mat.shape)
+    tol_keys = [] #For dataframe labels
+    for tolerance in range(win_len):
+        tolerance +=1 #Start at 1
+
+        windowed_labels = create_windowed_labels(labels, stride, tolerance, win_len)
+
+        # plt.plot(windowed_labels)
+        # plt.show()
+
+        AUROC_mean, conf_mat, g_mean, AUPR_mean = get_output(labels = windowed_labels, \
+            predictions = inwin_mean, data_option = 'NA', to_plot = False) #single value
+
+        AUROC_std, conf_mat, g_mean, AUPR_std = get_output(labels = windowed_labels, predictions = inwin_std, data_option = 'NA', to_plot = False)
+
+        #print(AUROC_mean)
+        tol_list_ROC.append(AUROC_mean)
+        #tol_mat[0, tolerance-1] = AUROC_mean #mean AUROC note mean refers to inwin_mean, not taking mean of AUROC
+        tol_keys.append('tol_{}-mean'.format(tolerance))
+        tol_list_ROC.append(AUROC_std)
+        #tol_mat[0, tolerance] = AUROC_std #std AUROC "" std
+        tol_keys.append('tol_{}-std'.format(tolerance))
+
+#        tol_mat[1, tolerance-1] = AUPR_mean #mean AUPR
+#        tol_mat[1, tolerance] = AUPR_std #mean AUPR
+        tol_list_PR.append(AUPR_mean)
+        tol_list_PR.append(AUPR_std)
+
+    ROCS = np.array(tol_list_ROC)
+    PRS = np.array(tol_list_PR)
+    tol_mat[0,:] = ROCS
+    tol_mat[1,:] = PRS
+    return tol_mat, tol_keys   
+
+def create_windowed_labels(labels, stride, tolerance, window_length):
+    '''
+    Create labels on seq level
+
+    int tolerance: number of fall frames (1's) in a window for it to be labeled as a fall (1). must not exceed window length
+
+    '''
+    output_length = int(np.floor((len(labels) - window_length) / stride))+1
+    #output_shape = (output_length, window_length, 1)
+    output_shape = (output_length, 1)
+    
+    total = np.zeros(output_shape)
+    
+    i=0
+    while i < output_length:
+        next_chunk = np.array([labels[i+j] for j in range(window_length)])
+        
+        num_falls = sum(next_chunk) #number of falls in the window
+
+        if num_falls >= tolerance:
+            total[i] = 1
+        else:
+            total[i] = 0
+
+       
+        i = i+stride
+
+    labels_windowed = total
+
+    return labels_windowed

@@ -318,7 +318,9 @@ def dummy_3d(img_width, img_height, win_len):
 	input_shape = (win_len, img_width, img_height, 1)
 
 	input_window = Input(shape = input_shape)
-	autoencoder = Model(input_window, input_window)
+	x = Reshape(input_shape, input_shape = input_shape)(input_window)
+
+	autoencoder = Model(input_window, x)
 	autoencoder.compile(optimizer='adadelta', loss='mean_squared_error')
 
 	model_type = 'conv'
@@ -330,8 +332,8 @@ def dummy_3d(img_width, img_height, win_len):
 
 import numpy as np
 if __name__ == "__main__":
-	# model,_,_ = CLSTM_AE_tanh(64,64,8)
-	# print(model.summary())
+	model,_,_ = dummy_3d(64,64,2)
+	print(model.summary())
 	# dummy = np.ones((1,8,64,64,1))*255
 	# #dummy = dummy- np.mean(dummy)
 	# pred = model.predict(dummy)

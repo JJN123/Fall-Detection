@@ -5,7 +5,8 @@ import numpy as np
 #import cv2
 from util import *
 import sys
-root_drive = 'N:/FallDetection/Fall-Data/' 
+from h5py_init import *
+root_drive = '.' 
 
 if not os.path.isdir(root_drive):
     print('Using Sharcnet equivalent of root_drive')
@@ -26,7 +27,12 @@ def init_windowed_arr(dset = 'Thermal', ADL_only = True, win_len = 8, img_width 
         ndarray vids_win: shape (samples-D, win_len, )
     '''
 
-    master_path = root_drive + '/H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)
+    master_path = root_drive + '/H5Data/{}/Data_set-{}-imgdim{}x{}.h5'.format(dset,dset, img_width, img_height)
+
+    if not os.path.isfile(master_path):
+        print('initializing h5py..')
+        init_videos(img_width = img_width, img_height = img_height, \
+     raw = False, dset = dset)
 
     with h5py.File(master_path, 'r') as hf:
 
@@ -43,7 +49,7 @@ def init_windowed_arr(dset = 'Thermal', ADL_only = True, win_len = 8, img_width 
                         img_height= img_height)
 
             if ADL_only == True:
-                save_path = root_drive + 'npData/{}/'.format(dset)
+                save_path = root_drive + '/npData/{}/'.format(dset)
 
                 if not os.path.isdir(save_path):
                     os.makedirs(save_path)
@@ -60,6 +66,7 @@ def init_windowed_arr(dset = 'Thermal', ADL_only = True, win_len = 8, img_width 
 def create_windowed_arr_per_vid(vids_dict, stride, win_len, img_width, img_height):
     '''
     Assumes vids_dict is h5py structure, ie. vids_dict = hf['Data_2017/UR/Raw/Split_by_video']
+    data set must cotnain atleast win_len frames
     '''
 
     vid_list = [len(vid['Data'][:]) for vid in list(vids_dict.values())]
@@ -115,7 +122,9 @@ def create_windowed_arr(arr, stride, win_len):
 def load_data(split_by_vid_or_class = 'Split_by_vid', raw = False, img_width = 64, \
     img_height = 64, vid_class = 'NonFall', dset = 'Thermal'):
     """
-    Note :to use this function, need to have downloaded h5py for dset, and placed in ./H5Data directory
+    Note :to use this function, need to have downloaded h5py for dset, and placed in ./H5Data directory, or have downloaded data set,
+    extracted frames, and placed them in directory structure specified in h5py_init.py
+    
     Loads data from h5py file, and reutrns a dictionary, the properties of which depend on params vid_class and split_by_vid_or_class
 
     Params:

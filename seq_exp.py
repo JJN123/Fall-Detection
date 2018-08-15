@@ -23,6 +23,7 @@ if not os.path.isdir(root_drive):
     print('Using Sharcnet equivalent of root_drive')
     root_drive = '/home/jjniatsl/project/jjniatsl/Fall-Data/'
 
+root_drive = './'
 class SeqExp(ImgExp):
         '''
         A autoencoder experiment based on sequence of images
@@ -88,7 +89,7 @@ class SeqExp(ImgExp):
                     '{epoch:03d}-{loss:.3f}.hdf5', period = 100, verbose =1)
                 timestamp = time.time()
                 print('./Checkpoints/' + model_name + '-' + '.{epoch:03d}-{loss:.3f}.hdf5')
-                csv_logger = CSVLogger('./logs/' + model_name + 'training-' + \
+                csv_logger = CSVLogger('./Logs/' + model_name + 'training-' + \
                 str(timestamp) + '.log')
 
                 #callbacks_list = [checkpointer, early_stopper, csv_logger]
@@ -168,10 +169,12 @@ class SeqExp(ImgExp):
             """
 
             img_width, img_height, win_len, model = self.img_width, self.img_height, self.win_len, self.model
-
+           
+           
+           
             recons_seq = model.predict(test_data) #(samples-win_len+1, win_len, wd,ht,1)
-            print(recons_seq.shape)
-
+           
+            recons_seq_or = recons_seq
             recons_seq = recons_seq.reshape(len(recons_seq),win_len, img_height*img_width)#(samples-win_len+1, 5, wd*ht)
             test_data = test_data.reshape(len(test_data),win_len, img_height*img_width)#(samples-win_len+1, 5, wd*ht)
 
@@ -185,7 +188,7 @@ class SeqExp(ImgExp):
 
                 RE_dict[agg_type] = agg_window(RE, agg_type)
 
-            return RE_dict
+            return RE_dict, recons_seq_or
 
         def test(self, animate = False):
 
@@ -212,33 +215,38 @@ class SeqExp(ImgExp):
             labels_total_l = []
             vid_index = 0 #vid index TODO rename
 
-            vid_dir_keys_NFF = generate_vid_keys('NFFall', dset = dset) #ensures sorted order
             vid_dir_keys_Fall = generate_vid_keys('Fall', dset = dset)
-            num_vids = len(vid_dir_keys_NFF)
+            num_vids = len(vid_dir_keys_Fall)
             print('num_vids', num_vids)
-            ROC_mat = np.ones((num_vids,18)) # 35 is num_vids, 20 scores-Xstd,Xmean,tols std..,tols mean..
-            PR_mat = np.ones((num_vids,18))
 
-            path = root_drive + 'H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)
+            ROC_mat = np.ones((num_vids, 2*win_len + 2)) # 20 scores-Xstd,Xmean,tols std..,tols mean..
+            PR_mat = np.ones((num_vids, 2*win_len + 2))
+
+            path = root_drive + 'H5Data/{}/Data_set-{}-imgdim{}x{}.h5'.format(dset, dset, img_width, img_height)
+
+            if not os.path.isfile(path):
+                print('initializing h5py..')
+                init_videos(img_width = img_width, img_height = img_height, \
+                raw = False, dset = dset)
 
             with h5py.File(path, 'r') as hf:
 
                 data_dict = hf['{}/Processed/Split_by_video'.format(dset)]
-                
-                for Fall_name, NFF_name in zip(vid_dir_keys_Fall, vid_dir_keys_NFF):
+               
+                for Fall_name in vid_dir_keys_Fall:
+                    print(Fall_name)
 
-                    vid_total, labels_total = restore_Fall_vid(data_dict, Fall_name, NFF_name)
+                    vid_total = data_dict[Fall_name]['Data'][:]
+                    labels_total = data_dict[Fall_name]['Labels'][:]
 
                     display_name = Fall_name
-
-                    test_labels = labels_total
 
                     test_labels = labels_total
                     test_data = vid_total.reshape(len(vid_total), img_width, img_height, 1)
                     test_data_windowed = create_windowed_arr(test_data, stride, win_len)
                     
-                    RE_dict = self.get_MSE_all_agg(test_data_windowed) #Return dict with value for each score style 
-
+                    RE_dict, recons_seq = self.get_MSE_all_agg(test_data_windowed) #Return dict with value for each score style 
+                    
                     in_mean = RE_dict['in_mean']
                     in_std = RE_dict['in_std']
 
@@ -256,21 +264,14 @@ class SeqExp(ImgExp):
                     auc_x_mean, conf_mat, g_mean, ap_x_mean = get_output(labels = test_labels,\
                             predictions = x_mean, data_option = 'NA', to_plot = False)
 
-                    auc_in_std, conf_mat, g_mean, ap_in_std = get_output(labels = inwin_labels,\
-                            predictions = in_std, data_option = 'NA', to_plot = False)
-                    auc_in_mean, conf_mat, g_mean, ap_in_mean = get_output(labels = inwin_labels,\
-                            predictions = in_mean, data_option = 'NA', to_plot = False)
-
                     ROC_mat[vid_index,0] = auc_x_std
                     ROC_mat[vid_index,1] = auc_x_mean
-#                        ROC_mat[i,2] = auc_in_std
-#                        ROC_mat[i,3] = auc_in_mean
+
                     tol_mat, tol_keys = gather_auc_avg_per_tol(in_mean, in_std, labels = test_labels, win_len = win_len)
                     AUROC_tol = tol_mat[0]
                     AUPR_tol = tol_mat[1]
                     num_scores_tol = tol_mat.shape[1]
-                    print('num_scores_tol', num_scores_tol)
-                    print('vid, auc_x_std', Fall_name, auc_x_std)
+
 
                     for k in range(num_scores_tol):
                         j = k+2 #start at 2, first two were for X_std and X_mean
@@ -283,34 +284,34 @@ class SeqExp(ImgExp):
                     vid_index += 1
                     
                     if animate == True:
-                        ani_dir = './animation/{}/'.format(dset)
+                        ani_dir = './Animation/{}/'.format(dset)
                         ani_dir = ani_dir + '/{}'.format(model_name)
                         if not os.path.isdir(ani_dir):
                             os.makedirs(ani_dir)
-
-                        animate_fall_detect_Spresent(testfall = test_data, recons = recons_seq[:,4,:], \
+                        print('saving animation to {}'.format(ani_dir))
+                        animate_fall_detect_Spresent(testfall = test_data, recons = recons_seq[:,int(np.floor(win_len/2)),:], \
                             scores = x_mean, to_save = ani_dir + '/{}.mp4'.format(Fall_name))
 
 
                 #    break
-
+                print('ROC_mat.shape', ROC_mat.shape)
                 AUROC_avg = np.mean(ROC_mat, axis = 0)
                 AUROC_std = np.std(ROC_mat, axis = 0)
                 AUROC_avg_std = join_mean_std(AUROC_avg, AUROC_std)
-                print(AUROC_std)
+                # print(AUROC_std)
                 AUPR_avg = np.mean(PR_mat, axis = 0)
                 AUPR_std = np.std(PR_mat, axis = 0)
 
                 AUPR_avg_std = join_mean_std(AUPR_avg, AUPR_std)
                 total = np.vstack((AUROC_avg_std, AUPR_avg_std))
-                
+                print(tol_keys)
                 df = pd.DataFrame(data = total, index = ['AUROC','AUPR'], columns = ['X-STD','X-Mean'] + tol_keys)
                 
-
+                print(df)
                 base = './AEComparisons/all_scores/{}/'.format(self.dset)
 
                 if not os.path.isdir(base):
-                    os.mkdir(base)
+                    os.makedirs(base)
 
                 save_path = './AEComparisons/all_scores/{}/{}.csv'.format(dset, model_name)
                 

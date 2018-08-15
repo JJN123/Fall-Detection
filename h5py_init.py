@@ -9,40 +9,48 @@ import sys
 Note, these functions will not work without setting up the directories of video frames as shown in get_dir_lists. Alternatively, contact me to get access to the final h5Py datasets, which this code procudes.
 '''
 
-root_drive = 'N:/FallDetection/Fall-Data/' #Put Path to video frames 
+root_drive = 'N:/FallDetection/Jacob/Fall-Data/' #Put Path to video frames 
 
 if not os.path.isdir(root_drive):
     print('Using Sharcnet equivalent of root_drive')
     root_drive = '/home/jjniatsl/project/jjniatsl/Fall-Data'
 
-
+root_drive = '.' #Current dir for now
 def get_dir_lists(dset):
     '''
     This shows structure which frames must be in
     '''
-    
-    if dset == 'Thermal':
 
-        path_Fall = root_drive + '/Thermal/Fall/Fall*'
-        path_ADL = root_drive + '/Thermal/NonFall/ADL*'
-    
-    elif dset == 'UR':
-        path_Fall = root_drive + '/UR_Kinect/Fall/original/Fall*'
-        path_ADL = root_drive + '/UR_Kinect/NonFall/original/adl*'
-    
-    elif dset == 'UR-Filled':
-        path_Fall = root_drive + '/UR_Kinect/Fall/filled/Fall*'
-        path_ADL = root_drive + '/UR_Kinect/NonFall/filled/adl*'
+    path_Fall = root_drive + '/Fall-Data/{}/Fall/Fall*'.format(dset)
+    path_ADL = root_drive + '/Fall-Data/{}/NonFall/ADL*'.format(dset)
 
-    elif dset == 'SDU':
-        path_Fall = root_drive + '/SDUFall/Fall/Fall*/Depth'
-        path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Depth'
+    # if dset == 'Thermal-Dummy':
+
+    #     path_Fall = root_drive + '/Fall-Data/Thermal-Dummy/Fall/Fall*'
+    #     path_ADL = root_drive + '/Fall-Data/Thermal-Dummy/NonFall/ADL*'
+
+    # elif dset == 'Thermal':
+
+    #     path_Fall = root_drive + '/Thermal/Fall/Fall*'
+    #     path_ADL = root_drive + '/Thermal/NonFall/ADL*'
     
-    elif dset == 'SDU-Filled':
-        path_Fall = root_drive + '/SDUFall/Fall/Fall*/Filled'
-        path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Filled'
+    # elif dset == 'UR':
+    #     path_Fall = root_drive + '/UR_Kinect/Fall/original/Fall*'
+    #     path_ADL = root_drive + '/UR_Kinect/NonFall/original/adl*'
+    
+    # elif dset == 'UR-Filled':
+    #     path_Fall = root_drive + '/UR_Kinect/Fall/filled/Fall*'
+    #     path_ADL = root_drive + '/UR_Kinect/NonFall/filled/adl*'
+
+    # elif dset == 'SDU':
+    #     path_Fall = root_drive + '/SDUFall/Fall/Fall*/Depth'
+    #     path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Depth'
+    
+    # elif dset == 'SDU-Filled':
+    #     path_Fall = root_drive + '/SDUFall/Fall/Fall*/Filled'
+    #     path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Filled'
         
-        
+    print(path_Fall, path_ADL)
     vid_dir_list_Fall = glob.glob(path_Fall)
     vid_dir_list_ADL = glob.glob(path_ADL)
 
@@ -109,9 +117,7 @@ def init_videos(img_width = 64, img_height = 64, \
         str dset: dataset to be loaded
 
     '''
-def init_videos(img_width = 64, img_height = 64, \
-     raw = False, dset = 'Thermal'): 
-    path = root_drive + '/H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height) 
+    path = root_drive + '/H5Data/{}/Data_set-{}-imgdim{}x{}.h5'.format(dset, dset, img_width, img_height) 
 
     vid_dir_list_0, vid_dir_list_1 = get_dir_lists(dset)
 
@@ -188,17 +194,9 @@ def init_vid(vid_dir = None, vid_class = None, img_width = 32, img_height = 32,\
     grp['Data'] = data
 
 def get_fall_indeces(Fall_name, dset):
-    root_dir = 'N:/FallDetection/Fall-Data/'
-    
-    if dset == 'Thermal':
-        labels_dir = root_dir + 'Thermal/Labels.csv'
-        
-    elif dset == 'UR' or dset == 'UR-Filled':
-        labels_dir = root_dir + 'UR_Kinect/Labels.csv'
-        
-    elif dset == 'SDU' or dset == 'SDU-Filled':
-        labels_dir = root_dir + '/SDUFall/Labels.csv'
+    root_dir = './Fall-Data/'
             
+    labels_dir = root_dir + '/{}/Labels.csv'.format(dset)
     #print(labels_dir)
     import pandas as pd
     my_data = pd.read_csv(labels_dir, sep=',', header = 0, index_col = 0)
@@ -235,7 +233,7 @@ def sort_frames(frames, dset):
                 print('failed to sort vid frames, trying again....')
                 pass
 
-        elif dset == 'FallFree' or 'FallFree-Filled':
+        elif dset == 'FallFree' or dset == 'FallFree-Filled':
             try:
                 frames = sorted(frames, key = lambda x: int(x.split('_')[2]))
             except ValueError:
@@ -260,9 +258,9 @@ def create_img_data_set(fpath, ht = 64, wd = 64, raw = False, sort = True, dset 
 
         '''
         
-       # print('gathering data at', fpath)
+        #print('gathering data at', fpath)
         fpath = fpath.replace('\\', '/')
-        #print(fpath+'/*.png')
+       # print(fpath+'/*.png')
         frames = glob.glob(fpath+'/*.jpg') + glob.glob(fpath+'/*.png')
 
         if sort == True:

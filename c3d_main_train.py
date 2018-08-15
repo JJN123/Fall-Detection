@@ -7,13 +7,13 @@ if __name__ == "__main__":
         '''
         These are the training setting. 
         '''
-        dset = 'UR-Filled'
-        img_width, img_height, win_len, epochs = 64,64, 8,50
+        dset = 'Thermal-Dummy'
+        img_width, img_height, win_len, epochs = 64,64, 2,2
         stride = 1
 
         
         model, model_name, model_type = dummy_3d(img_width, img_height, win_len)
-        model, model_name, model_type = C3D_AE(img_width, img_height, win_len)
+        #model, model_name, model_type = C3D_AE(img_width, img_height, win_len)
 
         print('model loaded')
         print(model.summary())
