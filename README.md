@@ -4,6 +4,8 @@ This is code developed while working at IATSL. This code can be used to detect f
 
 <a href="https://imgflip.com/gif/2fxwmj"><img src="https://i.imgflip.com/2fxwmj.gif" title="made at imgflip.com"/></a>
 
+<a href="https://imgflip.com/gif/2fxxpd"><img src="https://i.imgflip.com/2fxxpd.gif" title="made at imgflip.com"/></a>
+
 Falls are detected by first training an autoencoder to minimize recontruction error of ADL (activities of dailty living) video frames. The reconstruction error for falls should thus be higher, as is shown in the above GIF.
 
 
