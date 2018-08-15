@@ -32,6 +32,8 @@ To generate an animation, such as shown in the above GIF, run dae_main_test.py, 
 
 dae: deep autoencoder
 cae: convolutional autoencoder
+c3d_ae: 3d convolutional autoencoder
+clstm_ae: convolutional lstm autoencoder
 
 Requirements:
 
