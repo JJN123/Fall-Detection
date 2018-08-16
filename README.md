@@ -6,7 +6,7 @@ This was code developed while working at IATSL (http://iatsl.org/) as a PEY inte
 
 
 
-Falls are detected by first training an autoencoder to minimize recontruction error of ADL (activities of dailty living) video frames. The reconstruction error for falls should thus be higher, as is shown in the above GIF.
+Falls are detected by first training an autoencoder to minimize recontruction error of ADL (activities of dailty living) video frames. The reconstruction error for falls should thus be higher, as is shown in the above GIFs.
 
 
 **Code Usage:**
