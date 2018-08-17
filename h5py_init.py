@@ -9,7 +9,6 @@ import sys
 Note, these functions will not work without setting up the directories of video frames as shown in get_dir_lists. Alternatively, contact me to get access to the final h5Py datasets, which this code procudes.
 '''
 
-root_drive = 'N:/FallDetection/Jacob/Fall-Data/' #Put Path to video frames 
 
 if not os.path.isdir(root_drive):
     print('Using Sharcnet equivalent of root_drive')
@@ -24,6 +23,12 @@ def get_dir_lists(dset):
     path_Fall = root_drive + '/Fall-Data/{}/Fall/Fall*'.format(dset)
     path_ADL = root_drive + '/Fall-Data/{}/NonFall/ADL*'.format(dset)
 
+
+    #----------USe these for N: drive located Fall-Data
+    #root_drive = 'N:/FallDetection/Jacob/Fall-Data/' #Put Path to video frames 
+
+    # path_Fall = root_drive + '/Fall-Data/{}/Fall/Fall*'.format(dset)
+    # path_ADL = root_drive + '/Fall-Data/{}/NonFall/ADL*'.format(dset)
     # if dset == 'Thermal-Dummy':
 
     #     path_Fall = root_drive + '/Fall-Data/Thermal-Dummy/Fall/Fall*'
