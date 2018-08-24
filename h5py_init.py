@@ -9,12 +9,12 @@ import sys
 Note, these functions will not work without setting up the directories of video frames as shown in get_dir_lists. Alternatively, contact me to get access to the final h5Py datasets, which this code procudes.
 '''
 
+root_drive = '.' #Current dir for now
 
 if not os.path.isdir(root_drive):
     print('Using Sharcnet equivalent of root_drive')
     root_drive = '/home/jjniatsl/project/jjniatsl/Fall-Data'
 
-root_drive = '.' #Current dir for now
 def get_dir_lists(dset):
     '''
     This shows structure which frames must be in
