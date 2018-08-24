@@ -18,42 +18,44 @@ if not os.path.isdir(root_drive):
 def get_dir_lists(dset):
     '''
     This shows structure which frames must be in
+    
+    Params:
+        str dset: dataset to be loaded
+    Returns:
+        paths to ADL and Fall videos
     '''
-
-    path_Fall = root_drive + '/Fall-Data/{}/Fall/Fall*'.format(dset)
-    path_ADL = root_drive + '/Fall-Data/{}/NonFall/ADL*'.format(dset)
 
 
     #----------USe these for N: drive located Fall-Data
     #root_drive = 'N:/FallDetection/Jacob/Fall-Data/' #Put Path to video frames 
 
-    # path_Fall = root_drive + '/Fall-Data/{}/Fall/Fall*'.format(dset)
-    # path_ADL = root_drive + '/Fall-Data/{}/NonFall/ADL*'.format(dset)
-    # if dset == 'Thermal-Dummy':
+    path_Fall = root_drive + '/Fall-Data/{}/Fall/Fall*'.format(dset)
+    path_ADL = root_drive + '/Fall-Data/{}/NonFall/ADL*'.format(dset)
+    if dset == 'Thermal-Dummy':
 
-    #     path_Fall = root_drive + '/Fall-Data/Thermal-Dummy/Fall/Fall*'
-    #     path_ADL = root_drive + '/Fall-Data/Thermal-Dummy/NonFall/ADL*'
+        path_Fall = root_drive + '/Fall-Data/Thermal-Dummy/Fall/Fall*'
+        path_ADL = root_drive + '/Fall-Data/Thermal-Dummy/NonFall/ADL*'
 
-    # elif dset == 'Thermal':
+    elif dset == 'Thermal':
 
-    #     path_Fall = root_drive + '/Thermal/Fall/Fall*'
-    #     path_ADL = root_drive + '/Thermal/NonFall/ADL*'
+        path_Fall = root_drive + '/Thermal/Fall/Fall*'
+        path_ADL = root_drive + '/Thermal/NonFall/ADL*'
     
-    # elif dset == 'UR':
-    #     path_Fall = root_drive + '/UR_Kinect/Fall/original/Fall*'
-    #     path_ADL = root_drive + '/UR_Kinect/NonFall/original/adl*'
+    elif dset == 'UR':
+        path_Fall = root_drive + '/UR_Kinect/Fall/original/Fall*'
+        path_ADL = root_drive + '/UR_Kinect/NonFall/original/adl*'
     
-    # elif dset == 'UR-Filled':
-    #     path_Fall = root_drive + '/UR_Kinect/Fall/filled/Fall*'
-    #     path_ADL = root_drive + '/UR_Kinect/NonFall/filled/adl*'
+    elif dset == 'UR-Filled':
+        path_Fall = root_drive + '/UR_Kinect/Fall/filled/Fall*'
+        path_ADL = root_drive + '/UR_Kinect/NonFall/filled/adl*'
 
-    # elif dset == 'SDU':
-    #     path_Fall = root_drive + '/SDUFall/Fall/Fall*/Depth'
-    #     path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Depth'
+    elif dset == 'SDU':
+        path_Fall = root_drive + '/SDUFall/Fall/Fall*/Depth'
+        path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Depth'
     
-    # elif dset == 'SDU-Filled':
-    #     path_Fall = root_drive + '/SDUFall/Fall/Fall*/Filled'
-    #     path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Filled'
+    elif dset == 'SDU-Filled':
+        path_Fall = root_drive + '/SDUFall/Fall/Fall*/Filled'
+        path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Filled'
         
     print(path_Fall, path_ADL)
     vid_dir_list_Fall = glob.glob(path_Fall)
@@ -64,6 +66,7 @@ def get_dir_lists(dset):
     
     if len(vid_dir_list_ADL) == 0:
         print('no ADL vids found')
+
     return vid_dir_list_ADL, vid_dir_list_Fall
 
 
