@@ -117,7 +117,7 @@ def CAE(img_width =64, img_height = 64, regularizer_list = []):
 	return model, model_name, model_type
 
 
-def C3D_AE(img_width, img_height, win_length):
+def DSTCAE_C3D(img_width, img_height, win_length):
 	"""
 	int win_length: Length of window of frames
 	"""
@@ -154,7 +154,7 @@ def C3D_AE(img_width, img_height, win_length):
 	autoencoder.compile(optimizer='adadelta', loss='mean_squared_error')
 
 	model_type = 'conv'
-	model_name = 'C3D_AE'	
+	model_name = 'DSTCAE_C3D'	
 	encoder = None
 	decoder = None
 	model = autoencoder
@@ -162,7 +162,7 @@ def C3D_AE(img_width, img_height, win_length):
 	return model, model_name, model_type
 
 
-def CAE3D(img_width, img_height, win_length):
+def DSTCAE_UpSampling(img_width, img_height, win_length):
     """
     int win_length: Length of window of frames
     """
@@ -195,14 +195,14 @@ def CAE3D(img_width, img_height, win_length):
     autoencoder.compile(optimizer='adadelta', loss='mean_squared_error')
 
     model_type = 'conv'
-    model_name = 'CAE3D'	
+    model_name = 'DSTCAE_UpSampling'	
 
 
     model = autoencoder
 
     return model, model_name, model_type
 
-def CAE3D_deconv(img_width, img_height, win_length):
+def DSTCAE_Deconv(img_width, img_height, win_length):
     """
     int win_length: Length of window of frames
 
@@ -234,7 +234,7 @@ def CAE3D_deconv(img_width, img_height, win_length):
     autoencoder.compile(optimizer='adadelta', loss='mean_squared_error')
 
     model_type = 'conv'
-    model_name = 'CAE3D_Deconv-pooling-win_{}'.format(win_length)	
+    model_name = 'DSTCAE_Deconv-pooling-win_{}'.format(win_length)	
     model = autoencoder
 
     return model, model_name, model_type
