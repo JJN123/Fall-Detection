@@ -37,11 +37,16 @@ cae: convolutional autoencoder
 c3d_ae: 3d convolutional autoencoder
 clstm_ae: convolutional lstm autoencoder
 
-Requirements:
+**Requirements:**
 
-Dataset Sharing:
+Keras -
+Tensorflow -
+Python -
 
-Citation Policy:
+**Dataset Sharing:**
+
+**Citation Policy:**
+
 If you use or compare the results from the pre-processed data, then you should cite our papers:
 
 1. @inproceedings{nogasfall2018,
