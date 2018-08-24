@@ -39,5 +39,17 @@ clstm_ae: convolutional lstm autoencoder
 
 Requirements:
 
+Dataset Sharing:
+
+Citation Policy:
+If you use or compare the results from the pre-processed data, then you should cite our papers:
+
+1. @inproceedings{nogasfall2018,
+  title={Fall Detection from Thermal Camera Using Convolutional LSTM Autoencoder},
+  author={Nogas, Jacob and Khan, Shehroz S and Mihailidis, Alex},
+  year={2018},
+  booktitle={Proceedings of the $2^{nd}$ workshop on Aging, Rehabilitation and Independent Assisted Living, IJCAI Workshop}
+}
+
 TODO
 
