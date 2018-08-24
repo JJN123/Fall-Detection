@@ -39,9 +39,9 @@ clstm_ae: convolutional lstm autoencoder
 
 **Requirements:**
 
-Keras -
-Tensorflow -
-Python -
+Keras - 2.2.2
+Tensorflow - 1.10.0
+Python - 3.6.4
 
 **Dataset Sharing:**
 
