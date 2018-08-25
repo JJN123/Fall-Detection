@@ -38,8 +38,8 @@ Keras - 2.2.2
 Tensorflow - 1.10.0  
 Python - 3.6.4
 
-**Dataset Sharing:**
-Please contact Shehroz Khan at shehroz.khan@mail.utoronto.ca for access to preprocessed data. Place data in folder Fall-Data
+**Dataset Sharing:**  
+Please contact Shehroz Khan at shehroz.khan@mail.utoronto.ca for access to preprocessed data. Place data in folder Fall-Data  
 **Citation Policy:**
 
 If you use or compare the results from the pre-processed data, then you should cite our papers:
@@ -50,6 +50,3 @@ If you use or compare the results from the pre-processed data, then you should c
   year={2018},
   booktitle={Proceedings of the $2^{nd}$ workshop on Aging, Rehabilitation and Independent Assisted Living, IJCAI Workshop}
 }
-
-TODO
-
