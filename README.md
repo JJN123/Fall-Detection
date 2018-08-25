@@ -13,7 +13,7 @@ Falls are detected by first training an autoencoder to minimize recontruction er
 
 The code base is split into two main subsets
 
-{model}_main_{train}
+{model}_main_{train}  
 {model}_main_{test}
 
 which will execute training, or testing, respectively, with model {model}. 
@@ -34,12 +34,12 @@ To generate an animation, such as shown in the above GIF, run dae_main_test.py, 
 
 **Requirements:**
 
-Keras - 2.2.2
-Tensorflow - 1.10.0
+Keras - 2.2.2  
+Tensorflow - 1.10.0  
 Python - 3.6.4
 
 **Dataset Sharing:**
-
+Please contact Shehroz Khan at shehroz.khan@mail.utoronto.ca for access to preprocessed data.
 **Citation Policy:**
 
 If you use or compare the results from the pre-processed data, then you should cite our papers:
