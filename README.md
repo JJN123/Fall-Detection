@@ -1,6 +1,6 @@
 # Fall-Detection
 
-This was code developed while working at IATSL (http://iatsl.org/) as a PEY intern. It can be used to detect falls in video; examples are given in the following GIFs
+This is code developed while working at IATSL (http://iatsl.org/) as a UofT PEY intern. It can be used to detect falls in video. Examples are given in the following GIFs
 
 <a href="https://imgflip.com/gif/2gb012"><img src="https://i.imgflip.com/2gb012.gif" title="made at imgflip.com"/></a> <a href="https://imgflip.com/gif/2fxxpd"><img src="https://i.imgflip.com/2fxxpd.gif" title="made at imgflip.com"/></a> <a href="https://imgflip.com/gif/2fxzt3"><img src="https://i.imgflip.com/2fxzt3.gif" title="made at imgflip.com"/></a>
 
