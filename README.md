@@ -40,7 +40,7 @@ Python - 3.6.4
 
 **Dataset Sharing:**  
 
-Please contact Shehroz Khan at shehroz.khan@mail.utoronto.ca for access to preprocessed data. Place data in folder Fall-Data  
+Please contact Shehroz Khan at shehroz.khan@mail.utoronto.ca for access to preprocessed data. Place data in folder Fall-Data. See README.txt in Fall-Data for information on using the shared data.
 
 **Citation Policy:**
 
