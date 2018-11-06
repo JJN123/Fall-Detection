@@ -87,7 +87,7 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 
 	headers = data_matrix.pop(0)
 	print(headers)
-	print(np.array(data_matrix).shape)
+	#print(np.array(data_matrix).shape)
 	df = pd.DataFrame(data_matrix, index = vid_name_list, columns=headers)
 	df.loc['mean'] = df.mean()
 

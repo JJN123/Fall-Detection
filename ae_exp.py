@@ -133,7 +133,7 @@ class AEExp(ImgExp):
 		else:
 			test_data = test_data.reshape((len(test_data), np.prod(test_data.shape[1:])))
 		decoded_imgs = self.model.predict(test_data)
-		print('max, min:',np.amax(decoded_imgs), np.amin(decoded_imgs))
+		
 
 		RE = MSE(test_data, decoded_imgs)
 		return RE
