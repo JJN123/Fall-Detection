@@ -3,8 +3,7 @@ from seq_exp import *
 
 if __name__ == "__main__":
         pre_load = None #Set this to path to saved dstcae_c3d model
-        
-        pre_load = './Models/Thermal-Dummy/dummy_3d.h5'
+
         if pre_load == None:
                 print('No model path given, please update pre_load variable in dae_main_test.py')
 
