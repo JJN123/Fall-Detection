@@ -13,8 +13,8 @@ Falls are detected by first training an autoencoder to minimize recontruction er
 
 The code base is split into two main subsets
 
-{model}_main_{train}  
-{model}_main_{test}
+{model}\_main\_{train}  
+{model}\_main\_{test}
 
 which will execute training, or testing, respectively, with model {model}. 
 
