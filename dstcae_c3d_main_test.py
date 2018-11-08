@@ -5,7 +5,7 @@ if __name__ == "__main__":
         pre_load = None #Set this to path to saved dstcae_c3d model
 
         if pre_load == None:
-                print('No model path given, please update pre_load variable in dae_main_test.py')
+                print('No model path given, please update pre_load variable in dstcae_c3d_main_test.py')
 
         else:
                 img_width, img_height, win_len = 64,64,2

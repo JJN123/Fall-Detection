@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
 
 	if pre_load == None:
-		print('No model path given, please update pre_load variable in dae_main_test.py')
+		print('No model path given, please update pre_load variable in cae_main_test.py')
 
 	else:
 		hor_flip = True
