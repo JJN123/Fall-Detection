@@ -3,7 +3,7 @@
 This is code which was developed while working at IATSL (http://iatsl.org/) as a UofT PEY intern. 
 
 We formulated the fall detection problem as an anomaly detection problem because falls occur rarely and there may be insufficient data to train supervised classifiers. To handle privacy concerns, this work focus on detecting falls from thermal and depth cameras.
-Falls are detected by training a deep spatio-temporal autoencoder to minimize recontruction error of activities of dailty living video frames. It wass hypothesizes that the reconstruction error for unseen falls should be higher, as shown in example GIFs below:
+Falls are detected by training a deep spatio-temporal autoencoder to minimize the recontruction error of activities of dailty living video frames. It was hypothesizes that the reconstruction error for unseen falls should be higher, as shown in example GIFs below:
 
 <a href="https://imgflip.com/gif/2gb012"><img src="https://i.imgflip.com/2gb012.gif" title="made at imgflip.com"/></a> <a href="https://imgflip.com/gif/2fxxpd"><img src="https://i.imgflip.com/2fxxpd.gif" title="made at imgflip.com"/></a> <a href="https://imgflip.com/gif/2fxzt3"><img src="https://i.imgflip.com/2fxzt3.gif" title="made at imgflip.com"/></a>
 
