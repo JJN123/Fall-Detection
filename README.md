@@ -1,13 +1,11 @@
 # Fall-Detection
 
-This is code which was developed while working at IATSL (http://iatsl.org/) as a UofT PEY intern. It can be used to detect falls in video. Examples are given in the following GIFs
+This is code which was developed while working at IATSL (http://iatsl.org/) as a UofT PEY intern. 
+
+We formulated the fall detection problem as an anomaly detection problem because falls occur rarely and there may be insufficient data to train supervised classifiers. To handle privacy concerns, this work focus on detecting falls from thermal and depth cameras.
+Falls are detected by training an autoencoder to minimize recontruction error of ADL (activities of dailty living) video frames. The reconstruction error for falls should be higher, as is shown in example GIFs below:
 
 <a href="https://imgflip.com/gif/2gb012"><img src="https://i.imgflip.com/2gb012.gif" title="made at imgflip.com"/></a> <a href="https://imgflip.com/gif/2fxxpd"><img src="https://i.imgflip.com/2fxxpd.gif" title="made at imgflip.com"/></a> <a href="https://imgflip.com/gif/2fxzt3"><img src="https://i.imgflip.com/2fxzt3.gif" title="made at imgflip.com"/></a>
-
-
-
-Falls are detected by first training an autoencoder to minimize recontruction error of ADL (activities of dailty living) video frames. The reconstruction error for falls should thus be higher, as is shown in the above GIFs.
-
 
 **Code Usage:**
 
@@ -40,7 +38,7 @@ Python - 3.6.4
 
 **Dataset Sharing:**  
 
-Please contact Shehroz Khan at shehroz.khan@utoronto.ca for access to preprocessed data. Place data in folder Fall-Data. See README.txt in Fall-Data for information on using the shared data.
+Please contact Shehroz Khan at shehroz.khan@uhn.ca for access to preprocessed data. Place data in folder Fall-Data. See README.txt in Fall-Data for information on using the shared data.
 
 **Citation Policy:**
 
