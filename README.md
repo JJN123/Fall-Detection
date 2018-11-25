@@ -44,9 +44,20 @@ Please contact Shehroz Khan at shehroz.khan@uhn.ca for access to preprocessed da
 
 If you use or compare the results from the pre-processed data, then you should cite our papers:
 
-1. @inproceedings{nogasfall2018,
+1. For comparison with Convolutional-LSTM: 
+
+@inproceedings{nogasfall2018,
   title={Fall Detection from Thermal Camera Using Convolutional LSTM Autoencoder},
   author={Nogas, Jacob and Khan, Shehroz S and Mihailidis, Alex},
   year={2018},
   booktitle={Proceedings of the $2^{nd}$ workshop on Aging, Rehabilitation and Independent Assisted Living, IJCAI Workshop}
+}
+
+2. For comparison with Deep Spatio-temporal (3D) Autoencoders, Convolutional-LSTM: 
+
+@article{nogas2018deepfall,
+  title={DeepFall--Non-invasive Fall Detection with Deep Spatio-Temporal Convolutional Autoencoders},
+  author={Nogas, Jacob and Khan, Shehroz S and Mihailidis, Alex},
+  journal={arXiv preprint arXiv:1809.00977},
+  year={2018}
 }
