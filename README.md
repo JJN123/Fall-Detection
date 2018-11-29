@@ -62,7 +62,7 @@ If you use or compare the results from the pre-processed data, then you should c
   year={2018}
 }
 
-**Relevant Code Legend**
+**Code Legend for Training and Testing**
 
 1. dae_main_train.py - Train a fully connected autoencoder model
 2. dae_main_test.py - Test a fully connected autoencoder model
