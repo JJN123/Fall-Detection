@@ -64,16 +64,16 @@ If you use or compare the results from the pre-processed data, then you should c
 
 **Relevant Code Legend**
 
-dae_main_train.py - Train a fully connected autoencoder model
-dae_main_test.py - Test a fully connected autoencoder model
+1. dae_main_train.py - Train a fully connected autoencoder model
+2. dae_main_test.py - Test a fully connected autoencoder model
 
-cae_main_train.py - Train a 2D convolutional autoencoder model
-cae_main_test.py - Test a 2D convolutional autoencoder model
+3. cae_main_train.py - Train a 2D convolutional autoencoder model
+4. cae_main_test.py - Test a 2D convolutional autoencoder model
 
 
-clstm_ae_main_train.py - Train a convolutional LSTM autoencoder model
-clstm_ae_main_test.py - Test a convolutional LSTM autoencoder model
+5. clstm_ae_main_train.py - Train a convolutional LSTM autoencoder model
+6. clstm_ae_main_test.py - Test a convolutional LSTM autoencoder model
 
-dstcae_c3d_main_train.py - Train a 3D convolutional autoencoder model
-dstcae_c3d_main_test.py - Test a 3D convolutional autoencoder model
+7. dstcae_c3d_main_train.py - Train a 3D convolutional autoencoder model
+8. dstcae_c3d_main_test.py - Test a 3D convolutional autoencoder model
 
