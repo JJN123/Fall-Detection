@@ -61,3 +61,19 @@ If you use or compare the results from the pre-processed data, then you should c
   journal={arXiv preprint arXiv:1809.00977},
   year={2018}
 }
+
+**Relevant Code Legend**
+
+dae_main_train.py - Train a fully connected autoencoder model
+dae_main_test.py - Test a fully connected autoencoder model
+
+cae_main_train.py - Train a 2D convolutional autoencoder model
+cae_main_test.py - Test a 2D convolutional autoencoder model
+
+
+clstm_ae_main_train.py - Train a convolutional LSTM autoencoder model
+clstm_ae_main_test.py - Test a convolutional LSTM autoencoder model
+
+dstcae_c3d_main_train.py - Train a 3D convolutional autoencoder model
+dstcae_c3d_main_test.py - Test a 3D convolutional autoencoder model
+
