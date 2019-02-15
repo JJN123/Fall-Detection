@@ -8,9 +8,9 @@ import sys
 from h5py_init import *
 root_drive = '.' 
 
-if not os.path.isdir(root_drive):
-    print('Using Sharcnet equivalent of root_drive')
-    root_drive = '/home/jjniatsl/project/jjniatsl/Fall-Data'
+#if not os.path.isdir(root_drive):
+#    print('Using Sharcnet equivalent of root_drive')
+#    root_drive = '/home/jjniatsl/project/jjniatsl/Fall-Data'
 
 
 def init_windowed_arr(dset = 'Thermal', ADL_only = True, win_len = 8, img_width = 64, img_height = 64):
@@ -180,7 +180,7 @@ def load_data(split_by_vid_or_class = 'Split_by_vid', raw = False, img_width = 6
     
     path = './H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)
 
-    path = 'N:/FallDetection/Fall-Data//H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)#Local use only
+   # path = 'N:/FallDetection/Fall-Data//H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)#Local use only
     
 
     #init_h5py(path)
