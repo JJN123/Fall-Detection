@@ -48,8 +48,14 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 	vid_dir_keys_Fall = generate_vid_keys('Fall', experiment.dset) #Ensures sorted order of fall vids
 	
 	path = root_drive + '/H5Data/Data_set-{}-imgdim{}x{}.h5'.format(experiment.dset, experiment.img_width, experiment.img_height)
-
+	
+	if not os.path.isfile(path):
+		print('h5py path {} not found, attempting to create h5 file..'.format(path))
+		init_videos(img_width = img_width, img_height = img_height, \
+			    raw = False, dset = dset)
+	
 	Fall_stop = 'None' #Make th
+	
 
 	with h5py.File(path, 'r') as hf:
 		data_dict = hf[dset + '/Processed/Split_by_video']
