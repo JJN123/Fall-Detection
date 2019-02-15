@@ -8,8 +8,6 @@ import glob
 #import cv2
 
 
-np.set_printoptions(threshold = np.nan)
-
 class ImgExp:
 
 	"""
