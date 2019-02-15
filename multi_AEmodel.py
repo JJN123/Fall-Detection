@@ -17,11 +17,12 @@ from keras import backend as K
 
 #Better name fot his file? Maybe just thresh tools?
 
-root_drive = 'N:/FallDetection/Jacob/Fall-Data/' 
+#root_drive = 'N:/FallDetection/Jacob/Fall-Data/' 
+root_drive = '.'
 
-if not os.path.isdir(root_drive):
-    print('Using Sharcnet equivalent of root_drive')
-    root_drive = '/home/jjniatsl/project/jjniatsl/Fall-Data'
+#if not os.path.isdir(root_drive):
+ #   print('Using Sharcnet equivalent of root_drive')
+  #  root_drive = '/home/jjniatsl/project/jjniatsl/Fall-Data'
 
 
 
