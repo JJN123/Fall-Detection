@@ -186,24 +186,30 @@ def load_data(split_by_vid_or_class = 'Split_by_vid', raw = False, img_width = 6
     #init_h5py(path)
 
     if not os.path.isfile(path):
-        print('h5py path {} not found'.format(path))
-    
-    else:
-        print('h5py path found, loading data_dict..')
-        if split_by_vid_or_class == 'Split_by_class':
-            if raw == False: 
-                root_path = dset + '/Processed/' + split_by_vid_or_class + '/' + vid_class
-            else:
-                root_path = dset + '/Raw/'+ split_by_vid_or_class + '/' + vid_class
-        else:
-            if raw == False: 
-                root_path = dset + '/Processed/' + split_by_vid_or_class
-            else:
-                root_path = dset + '/Raw/'+ split_by_vid_or_class
-        print('getting data at group', root_path)
+        print('h5py path {} not found, attempting to create h5 file..'.format(path))
+	init_data_by_class(vid_class = vid_class, dset = dset,\
+       		raw = False, img_width = img_width, img_height = img_height)
 
-        with h5py.File(path, 'r') as hf:
-            data_dict = hf[root_path]['Data'][:]
+	init_videos(img_width = img_width, img_height = img_height, \
+		raw = False, dset = dset)
+	
+    
+    #else:
+    #print('h5py path found, loading data_dict..')
+    if split_by_vid_or_class == 'Split_by_class':
+        if raw == False: 
+            root_path = dset + '/Processed/' + split_by_vid_or_class + '/' + vid_class
+        else:
+            root_path = dset + '/Raw/'+ split_by_vid_or_class + '/' + vid_class
+    else:
+        if raw == False: 
+            root_path = dset + '/Processed/' + split_by_vid_or_class
+        else:
+            root_path = dset + '/Raw/'+ split_by_vid_or_class
+    print('getting data at group', root_path)
+
+    with h5py.File(path, 'r') as hf:
+        data_dict = hf[root_path]['Data'][:]
   
     return data_dict
 
