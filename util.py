@@ -8,7 +8,7 @@ from sklearn.utils import class_weight as cw
 #import h5py
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
-import cv2
+#import cv2
 import h5py
 from random import randint, seed
 from imblearn.metrics import geometric_mean_score

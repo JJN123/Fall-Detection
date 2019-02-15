@@ -54,7 +54,7 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 	if not os.path.isfile(path):
 		print('h5py path {} not found, attempting to create h5 file..'.format(path))
 		init_videos(img_width = img_width, img_height = img_height, \
-			    raw = False, dset = dset)
+				raw = False, dset = dset)
 	
 	Fall_stop = 'None' #Make th
 	
