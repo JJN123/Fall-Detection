@@ -6,7 +6,8 @@ import numpy as np
 from util import *
 import sys
 '''
-Note, these functions will not work without setting up the directories of video frames as shown in get_dir_lists. Alternatively, contact me to get access to the final h5Py datasets, which this code procudes.
+Note, these functions will not work without setting up the directories of video frames as shown in get_dir_lists. 
+Alternatively, contact me to get access to the final h5Py datasets, which this code procudes.
 '''
 
 root_drive = '.' #Current dir for now
