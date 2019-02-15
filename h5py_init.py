@@ -12,9 +12,9 @@ Alternatively, contact me to get access to the final h5Py datasets, which this c
 
 root_drive = '.' #Current dir for now
 
-if not os.path.isdir(root_drive):
-    print('Using Sharcnet equivalent of root_drive')
-    root_drive = '/home/jjniatsl/project/jjniatsl/Fall-Data'
+#if not os.path.isdir(root_drive):
+#    print('Using Sharcnet equivalent of root_drive')
+#    root_drive = '/home/jjniatsl/project/jjniatsl/Fall-Data'
 
 def get_dir_lists(dset):
     '''
