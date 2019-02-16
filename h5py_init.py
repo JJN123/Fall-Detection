@@ -39,24 +39,24 @@ def get_dir_lists(dset):
 
     elif dset == 'Thermal':
 
-        path_Fall = root_drive + '/Thermal/Fall/Fall*'
-        path_ADL = root_drive + '/Thermal/NonFall/ADL*'
+        path_Fall = root_drive + '/Fall-Data/Thermal/Fall/Fall*'
+        path_ADL = root_drive + '/Fall-Data/Thermal/NonFall/ADL*'
     
     elif dset == 'UR':
-        path_Fall = root_drive + '/UR_Kinect/Fall/original/Fall*'
-        path_ADL = root_drive + '/UR_Kinect/NonFall/original/adl*'
+        path_Fall = root_drive + '/Fall-Data/UR_Kinect/Fall/original/Fall*'
+        path_ADL = root_drive + '/Fall-Data/UR_Kinect/NonFall/original/adl*'
     
     elif dset == 'UR-Filled':
-        path_Fall = root_drive + '/UR_Kinect/Fall/filled/Fall*'
-        path_ADL = root_drive + '/UR_Kinect/NonFall/filled/adl*'
+        path_Fall = root_drive + '/Fall-Data/UR_Kinect/Fall/filled/Fall*'
+        path_ADL = root_drive + '/Fall-Data/UR_Kinect/NonFall/filled/adl*'
 
     elif dset == 'SDU':
-        path_Fall = root_drive + '/SDUFall/Fall/Fall*/Depth'
-        path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Depth'
+        path_Fall = root_drive + '/Fall-Data/SDUFall/Fall/Fall*/Depth'
+        path_ADL = root_drive + '/Fall-Data/SDUFall/NonFall/ADL*/Depth'
     
     elif dset == 'SDU-Filled':
-        path_Fall = root_drive + '/SDUFall/Fall/Fall*/Filled'
-        path_ADL = root_drive + '/SDUFall/NonFall/ADL*/Filled'
+        path_Fall = root_drive + '/Fall-Data/SDUFall/Fall/Fall*/Filled'
+        path_ADL = root_drive + '/Fall-Data/SDUFall/NonFall/ADL*/Filled'
         
     print(path_Fall, path_ADL)
     vid_dir_list_Fall = glob.glob(path_Fall)
@@ -126,9 +126,15 @@ def init_videos(img_width = 64, img_height = 64, \
         str dset: dataset to be loaded
 
     '''
-    path = root_drive + '/H5Data/{}/Data_set-{}-imgdim{}x{}.h5'.format(dset, dset, img_width, img_height) 
+    path = root_drive + '/H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height) 
+    #print(root_drive + '/H5Data/{}/'.format(dset))
 
     vid_dir_list_0, vid_dir_list_1 = get_dir_lists(dset)
+
+
+    if len(vid_dir_list_0) == 0 and len(vid_dir_list_1) == 0:
+        print('no videos found, make sure video files are placed in Fall-Data folde, terminating...')
+        sys.exit()
 
     if raw == False: 
         root_path = dset + '/Processed/Split_by_video'
@@ -328,9 +334,9 @@ def init_data_by_class(vid_class = 'NonFall', dset = 'Thermal',\
     if dset == 'Thermal':
         
         if vid_class == 'NonFall':
-            fpath= root_drive + '/Thermal/{}/ADL*'.format(vid_class)            
+            fpath= root_drive + '/Fall-Data/Thermal/{}/ADL*'.format(vid_class)            
         elif vid_class == 'Fall':
-            fpath= root_drive + '/Thermal/{}/Fall*'.format(vid_class)           
+            fpath= root_drive + '/Fall-Data/Thermal/{}/Fall*'.format(vid_class)           
         else:
             print('invalid vid class') 
             return
@@ -339,21 +345,21 @@ def init_data_by_class(vid_class = 'NonFall', dset = 'Thermal',\
     elif dset == 'UR-Filled': 
 
         if vid_class == 'NonFall':
-            fpath= root_drive + '/UR_Kinect/{}/filled/adl*'.format(vid_class)            
+            fpath= root_drive + '/Fall-Data/UR_Kinect/{}/filled/adl*'.format(vid_class)            
         else:
-            fpath= root_drive + '/UR_Kinect/{}/filled/Fall*'.format(vid_class)            
+            fpath= root_drive + '/Fall-Data/UR_Kinect/{}/filled/Fall*'.format(vid_class)            
 
 
     elif dset == 'UR':
 
         if vid_class == 'NonFall':
-            fpath= root_drive + '/UR_Kinect/{}/original/adl*'.format(vid_class)            
+            fpath= root_drive + '/Fall-Data/UR_Kinect/{}/original/adl*'.format(vid_class)            
         else:
-            fpath= root_drive + '/UR_Kinect/{}/original/Fall*'.format(vid_class)            
+            fpath= root_drive + '/Fall-Data/UR_Kinect/{}/original/Fall*'.format(vid_class)            
 
 
     elif dset == 'SDU':
-        fpath = root_drive + '/SDUFall/{}/ADL*/Depth'.format(vid_class)
+        fpath = root_drive + '/Fall-Data/SDUFall/{}/ADL*/Depth'.format(vid_class)
 
     elif dset == 'SDU-Filled':
         fpath = root_drive + '/SDUFall/{}/ADL*/Filled'.format(vid_class)
@@ -361,6 +367,9 @@ def init_data_by_class(vid_class = 'NonFall', dset = 'Thermal',\
 
     data = create_img_data_set(fpath, ht, wd, raw, False) #Don't need to sort
 
+    if data.shape[0] == 0:
+        print('no data found, make sure video files are placed in Fall-Data folder, terminating')
+        sys.exit()
     #path = './H5Data/Data_set_imgdim{}x{}.h5'.format(img_width, img_height) #Old
     #path = 'N:/FallDetection/Fall-Data/H5Data/Data_set_imgdim{}x{}.h5'.format(img_width, img_height) #Old
     path = root_drive + '/H5Data/Data_set-{}-imgdim{}x{}.h5'.format(dset, img_width, img_height)

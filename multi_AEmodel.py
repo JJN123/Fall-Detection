@@ -10,7 +10,7 @@ from h5py_init import *
 
 
 import h5py
-#import cv2
+import cv2
 import sys
 import pickle
 from data_management import *
@@ -55,6 +55,8 @@ def get_stats_for_all_vids(experiment = None, thresholds = None, metric = 'G_Mea
 		print('h5py path {} not found, attempting to create h5 file..'.format(path))
 		init_videos(img_width = img_width, img_height = img_height, \
 				raw = False, dset = dset)
+		init_data_by_class(vid_class = vid_class, dset = dset,\
+			raw = False, img_width = img_width, img_height = img_height)
 	
 	Fall_stop = 'None' #Make th
 	

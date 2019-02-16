@@ -15,11 +15,9 @@ def init_dae_exp(pre_load = None, regularizer_list = []):
 	img_width, img_height = 64,64
 	hor_flip = False
 
-	misc_save_info =  None
-	quick_test = False
 	initial_epoch = 0
 	
-	dset = 'UR-Filled' #Choose dset here
+	dset = 'Thermal' #Choose data set here
 
 	autoencooder, model_name, model_type = DAE(img_width = img_width, 
 		img_height = img_height, regularizer_list = regularizer_list)

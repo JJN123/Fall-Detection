@@ -2,7 +2,7 @@ import os
 import glob
 import h5py
 import numpy as np
-#import cv2
+import cv2
 from util import *
 import sys
 from h5py_init import *
@@ -187,12 +187,10 @@ def load_data(split_by_vid_or_class = 'Split_by_vid', raw = False, img_width = 6
 
     if not os.path.isfile(path):
         print('h5py path {} not found, attempting to create h5 file..'.format(path))
-        init_data_by_class(vid_class = vid_class, dset = dset,\
-           		raw = False, img_width = img_width, img_height = img_height)
-
         init_videos(img_width = img_width, img_height = img_height, \
         	raw = False, dset = dset)
-	
+        init_data_by_class(vid_class = vid_class, dset = dset,\
+                raw = False, img_width = img_width, img_height = img_height)
     
     #else:
     #print('h5py path found, loading data_dict..')

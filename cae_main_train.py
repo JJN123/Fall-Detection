@@ -16,7 +16,6 @@ def init_cae_exp(pre_load = None):
 	epochs = 2
 	img_width, img_height = 64,64
 
-	misc_save_info =  None
 	dset = 'UR-Filled'
 	initial_epoch = 0
 
