@@ -17,7 +17,7 @@ def init_dae_exp(pre_load = None, regularizer_list = []):
 
 	initial_epoch = 0
 	
-	dset = 'Thermal' #Choose data set here
+	dset = 'UR-Filled' #Choose data set here
 
 	autoencooder, model_name, model_type = DAE(img_width = img_width, 
 		img_height = img_height, regularizer_list = regularizer_list)
