@@ -38,7 +38,11 @@ Python - 3.6.4
 
 **Dataset Sharing:**  
 
-Please contact Shehroz Khan at shehroz.khan@uhn.ca for access to preprocessed data. Place data in folder Fall-Data. See README.txt in Fall-Data for information on using the shared data.
+Please contact Dr. Shehroz Khan at shehroz.khan@uhn.ca for access to preprocessed data. Please specify your affiliation and why you need this data in your email.
+
+Place the data in folder Fall-Data. See README.txt in Fall-Data for information on using the shared data.
+
+Please use your institutional or university or commonly used email id (e.g. gmail) to request data. Oherwise, your email may go to the Spam folder and you may not get any response.
 
 **Citation Policy:**
 
