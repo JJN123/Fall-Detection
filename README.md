@@ -23,7 +23,7 @@ For example, we can train a deep fully conntected autoendoer (dae) on Thermal da
 
 **Testing:**
 
-to evaluate the model, run the correpsonding test module. The results of testing will be saved to AEComparisons. Once training has completed, find the saved model under Models/Thermal/{model_name}. To evaluate the model, set the variable pre_load in dae_main_test.py to the path to this model. Run dae_main_test.py and find the results in AEComparisons/AUC/Thermal/{model_name}.
+To evaluate the model, run the correpsonding test module. The results of testing will be saved to AEComparisons. Once training has completed, find the saved model under Models/Thermal/{model_name}. To evaluate the model, set the variable pre_load in dae_main_test.py to the path to this model. Run dae_main_test.py and find the results in AEComparisons/AUC/Thermal/{model_name}.
 
 **Generating Animation:**
 
@@ -42,7 +42,7 @@ Please contact Dr. Shehroz Khan at shehroz.khan@uhn.ca for access to preprocesse
 
 Place the data in folder Fall-Data. See README.txt in Fall-Data for information on using the shared data.
 
-Please use your institutional or university or commonly used email id (e.g. gmail) to request data. Oherwise, your email may go to the Spam folder and you may not get any response.
+Please use your institutional or university or commonly used email id (e.g. gmail) to request data. Otherwise, your email may go to the Spam folder and you may not get any response.
 
 **Citation Policy:**
 
