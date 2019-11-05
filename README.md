@@ -23,7 +23,7 @@ For example, we can train a deep fully conntected autoendoer (dae) on Thermal da
 
 **Testing:**
 
-To evaluate the model, run the correpsonding test module. The results of testing will be saved to AEComparisons. Once training has completed, find the saved model under Models/Thermal/{model_name}. To evaluate the model, set the variable pre_load in dae_main_test.py to the path to this model. Run dae_main_test.py and find the results in AEComparisons/AUC/Thermal/{model_name}.
+To evaluate the model, run the correpsonding test module. The results of testing will be saved to AEComparisons. Once training has completed, find the saved model under Models/Thermal/{model_name}. To evaluate the model, set the variable pre_load in dae_main_test.py to the path to this model. Run dae_main_test.py and find the results in AEComparisons/AUC/Thermal/{model_name}. The Labels.csv file under each dataset provides the ground truth labels for start and end of fall frames.
 
 **Generating Animation:**
 
