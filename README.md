@@ -1,4 +1,4 @@
-# Fall-Detection
+# DeepFall: 3D Spatio-Temporal Autoencoders for Fall-Detection from Privacy Protecting Cameras
 
 This code is developed by Jacob Nogas while working at IATSL (http://iatsl.org/) as a UofT PEY intern under the supervision of Dr. Shehroz Khan, Scientist, KITE-Toronto Rehab, University Health Network, Canada. 
 
