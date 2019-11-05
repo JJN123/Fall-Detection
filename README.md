@@ -62,8 +62,8 @@ If you use or compare the results from the pre-processed data, then you should c
 @article{nogas2018deepfall,
   title={DeepFall--Non-invasive Fall Detection with Deep Spatio-Temporal Convolutional Autoencoders},
   author={Nogas, Jacob and Khan, Shehroz S and Mihailidis, Alex},
-  journal={arXiv preprint arXiv:1809.00977},
-  year={2018}
+  journal={Journal of Health Informatics Research},
+  year={2019}
 }
 
 **Code Legend for Training and Testing**
