@@ -15,7 +15,7 @@ if __name__ == "__main__":
         stride = 1
        
         model, model_name, model_type = CLSTM_AE(img_width, img_height, win_len)
-        model, model_name, model_type = dummy_3d(img_width, img_height, win_len)
+       # model, model_name, model_type = dummy_3d(img_width, img_height, win_len)
 
         print('model loaded')
         print(model.summary())
