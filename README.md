@@ -1,6 +1,6 @@
 # DeepFall: 3D Spatio-Temporal Autoencoders for Fall-Detection from Privacy Protecting Cameras
 
-This code is developed by Jacob Nogas while working at IATSL (http://iatsl.org/) as a UofT PEY intern under the supervision of Dr. Shehroz Khan, Scientist, KITE-Toronto Rehab, University Health Network, Canada. 
+This code is developed by Jacob Nogas while working at IATSL (http://iatsl.org/) as a UofT PEY intern under the supervision of Dr. Shehroz Khan, Scientist, KITE-Toronto Rehab, University Health Network, Canada. *(We cannot provide support for programming issues, thanks for your understanding)*.
 
 We formulated the fall detection problem as an anomaly detection problem because falls occur rarely and there may be insufficient data to train supervised classifiers. To handle privacy concerns, this work focus on detecting falls from thermal and depth cameras.
 Falls are detected by training a deep spatio-temporal autoencoder to minimize the recontruction error of activities of daily living video frames. It was hypothesizes that the reconstruction error for unseen falls should be higher, as shown in example GIFs below:
